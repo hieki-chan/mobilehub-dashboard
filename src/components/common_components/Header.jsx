@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../api/AuthApi";
 import { ChevronRight, Bell } from "lucide-react";
+import NotificationList from "./NotificationList"; // hoặc đúng đường dẫn file của bạn
 
 const normalizePath = (path) =>
   (path || []).map((seg) =>
@@ -17,6 +18,80 @@ const Header = ({
   userName = "Admin",
 }) => {
   const [open, setOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false); // ⭐
+
+  const [notifications, setNotifications] = useState(() => {
+    const saved = localStorage.getItem("notifications");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            id: 1,
+            title: "Cộng đồng CNTT cho người mới bắt đầu",
+            content:
+              "Em mới học code NextJS 2 ngày code thế này được không nhỉ?",
+            time: "31 phút trước",
+            read: false,
+          },
+          {
+            id: 2,
+            title: "Tăng Hữu Huy",
+            content: "Đã code ngu lại được cái đéo bt 1 cái gì vkl ra",
+            time: "22 phút trước",
+            read: false,
+          },
+          {
+            id: 3,
+            title: "Tuyển Dụng CTV bán điện thoại",
+            content:
+              "Chào mừng bạn đến với nhóm! Giờ bạn có thể đăng bài, kết nối với các thành viên.",
+            time: "22 giờ trước",
+            read: true,
+          },
+          {
+            id: 4,
+            title: "Điện thoại mới",
+            content:
+              "Bạn có thể quan tâm đến IP17 mới ra giá chỉ bằng 1 bát phở ",
+            time: "1 ngày trước",
+            read: false,
+          },
+          {
+            id: 5,
+            title: "Khuyến mãi lớn!",
+            content: "Sản phẩm ABC giảm giá 20% — chỉ hôm nay!",
+            time: "3 ngày trước",
+            read: true,
+          },
+          {
+            id: 6,
+            title: "Tin mới",
+            content: "Có 1 sản phẩm mới vừa được thêm vào hệ thống.",
+            time: "3 ngày trước",
+            read: false,
+          },
+        ];
+  });
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  {
+    unreadCount > 0 && (
+      <span
+        className="absolute -top-1 -right-1 px-1.5 py-0.5 
+       text-xs font-semibold text-white bg-red-500 rounded-full"
+      >
+        {unreadCount}
+      </span>
+    );
+  }
+
+  const handleMarkRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -30,6 +105,10 @@ const Header = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+  }, [notifications]);
 
   const openUserProfile = () => {
     setOpen(false);
@@ -73,17 +152,30 @@ const Header = ({
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className="relative p-2 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none"
-            aria-label="Thông báo"
-            onClick={() => console.log("Notifications clicked")}
+            className="relative p-2 rounded-md text-gray-600 hover:bg-gray-100"
+            onClick={() => setShowNotifications((v) => !v)}
           >
             <Bell size={20} />
-            {notificationsCount > 0 && (
-              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold text-white bg-red-500 rounded-full">
-                {notificationsCount}
+
+            {unreadCount > 0 && (
+              <span
+                className="absolute -top-1 -right-1 px-1.5 py-0.5 
+                     text-xs font-semibold text-white bg-red-500 rounded-full"
+              >
+                {unreadCount}
               </span>
             )}
           </button>
+
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 z-[9999]">
+              <NotificationList
+                notifications={notifications} // 🔹 dùng state
+                onClose={() => setShowNotifications(false)}
+                onMarkRead={handleMarkRead} // 🔹 dùng hàm đánh dấu đã đọc
+              />
+            </div>
+          )}
 
           <div className="relative" ref={dropdownRef}>
             <button
