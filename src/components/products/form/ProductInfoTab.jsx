@@ -92,8 +92,10 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             setNewProduct={setNewProduct}
           />
           <Input
-            label="Tốc độ CPU"
+            label="Tốc độ CPU (GHz)"
             keyName="spec.cpu_speed"
+            type="number" // special: change to number input
+            min={0} // special: enforce non negative
             newProduct={newProduct}
             setNewProduct={setNewProduct}
           />
@@ -130,8 +132,10 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             setNewProduct={setNewProduct}
           />
           <Input
-            label="Dung lượng pin"
+            label="Dung lượng pin (mAh)"
             keyName="spec.battery_cap"
+            type="number" // special: change to number input
+            min={0} // special: enforce non negative
             newProduct={newProduct}
             setNewProduct={setNewProduct}
           />
@@ -150,8 +154,10 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             setNewProduct={setNewProduct}
           />
           <Input
-            label="Kích thước & khối lượng"
+            label="Kích thước & khối lượng (kg)"
             keyName="spec.size_weight"
+            type="number" // special: change to number input
+            min={0} // special: enforce non negative
             newProduct={newProduct}
             setNewProduct={setNewProduct}
           />
