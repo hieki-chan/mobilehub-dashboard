@@ -1,12 +1,12 @@
-import { useEffect } from "react"
-import {Input, Textarea} from "../../common_components/FormInput"
-
+import { useEffect } from "react";
+import { Input, Textarea } from "../../common_components/FormInput";
 
 const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
   // ✅ Tự động tính giá sau khi giảm khi giá hoặc % thay đổi
   useEffect(() => {
     const price = parseFloat(newProduct.price) || 0;
-    const discountPercent = parseFloat(newProduct.discount?.valueInPercent) || 0;
+    const discountPercent =
+      parseFloat(newProduct.discount?.valueInPercent) || 0;
     const discountedPrice = price - (price * discountPercent) / 100;
     setNewProduct((prev) => ({
       ...prev,
@@ -30,36 +30,20 @@ const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
           newProduct={newProduct}
           setNewProduct={setNewProduct}
         />
-
-        <div>
-          <label className="text-sm text-orange-500 block mb-1">
-            Giá sau khi giảm (VNĐ)
-          </label>
-          <input
-            type="text"
-            readOnly
-            className="w-full px-3 py-2 rounded-md bg-gray-800 text-orange-400 font-semibold cursor-default outline-none"
-            value={
-              newProduct.discountPrice
-                ? newProduct.discountPrice.toLocaleString("vi-VN")
-                : "0"
-            }
-          />
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Input
           label="Ngày bắt đầu"
           keyName="discount.startDate"
-          type="date"
+          type="datetime-local"
           newProduct={newProduct}
           setNewProduct={setNewProduct}
         />
         <Input
           label="Ngày kết thúc"
           keyName="discount.endDate"
-          type="date"
+          type="datetime-local"
           newProduct={newProduct}
           setNewProduct={setNewProduct}
         />
