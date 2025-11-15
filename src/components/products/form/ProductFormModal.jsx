@@ -34,10 +34,15 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
           const imageMap = [];
 
           variants.forEach((v) => {
-            const subImages = Array.isArray(v.subImageUrls) ? v.subImageUrls : [];
+            const subImages = Array.isArray(v.subImageUrls)
+              ? v.subImageUrls
+              : [];
             const variantImages = [v.imageUrl, ...subImages].filter(Boolean);
             const startIdx = allUrls.length;
-            const indexes = Array.from({ length: variantImages.length }, (_, j) => startIdx + j);
+            const indexes = Array.from(
+              { length: variantImages.length },
+              (_, j) => startIdx + j
+            );
             allUrls.push(...variantImages);
             imageMap.push(indexes);
           });
@@ -65,6 +70,50 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
   }, [isOpen, productId]);
 
   const handleSubmit = async () => {
+    // special: validation before api call
+    const errors = {};
+
+    // required fields
+    if (
+      !newProduct.price ||
+      !newProduct.discount?.valueInPercent ||
+      !newProduct.discount?.startDate ||
+      !newProduct.discount?.endDate ||
+      !newProduct.spec?.release_date
+    ) {
+      errors.required = "Vui lòng không để trống bất kỳ trường nào.";
+    }
+
+    // percent 0 - 100
+    const percent = parseFloat(newProduct.discount?.valueInPercent || 0);
+    if (percent < 0 || percent > 100) {
+      errors.percent = "Phần trăm giảm phải từ 0 đến 100.";
+    }
+
+    const now = new Date();
+    const start = new Date(newProduct.discount?.startDate);
+    const end = new Date(newProduct.discount?.endDate);
+
+    // start date >= now
+    if (start < now) {
+      errors.startDate = "Ngày bắt đầu không được trong quá khứ.";
+    }
+
+    // end date >= start date
+    if (end < start) {
+      errors.endDate = "Ngày kết thúc không thể nhỏ hơn ngày bắt đầu.";
+    }
+
+    // release date <= now
+    const release = new Date(newProduct.spec?.release_date);
+    if (release > now) {
+      errors.releaseDate = "Ngày phát hành phải là hiện tại hoặc quá khứ.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return alert(Object.values(errors)[0]);
+    }
+
     try {
       if (mode === "edit") await updateAdminProduct(productId, newProduct);
       else await createAdminProduct(newProduct);

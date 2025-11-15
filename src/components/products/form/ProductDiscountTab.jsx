@@ -1,6 +1,44 @@
 import { useEffect } from "react";
 import { Input, Textarea } from "../../common_components/FormInput";
 
+// special: validation function for product discount tab
+export const validateProductDiscount = (product) => {
+  const errors = {};
+
+  if (
+    !product.price ||
+    !product.discount?.valueInPercent ||
+    !product.discount?.startDate ||
+    !product.discount?.endDate ||
+    !product.spec?.release_date
+  ) {
+    errors.required = "Vui lòng không để trống bất kỳ trường nào.";
+  }
+
+  const percent = parseFloat(product.discount?.valueInPercent);
+  if (percent < 0 || percent > 100) {
+    errors.percent = "Phần trăm giảm phải từ 0 đến 100.";
+  }
+
+  const now = new Date();
+  const start = new Date(product.discount?.startDate);
+  if (start < now) {
+    errors.startDate = "Ngày bắt đầu không được trong quá khứ.";
+  }
+
+  const end = new Date(product.discount?.endDate);
+  if (end < start) {
+    errors.endDate = "Ngày kết thúc không thể nhỏ hơn ngày bắt đầu.";
+  }
+
+  const release = new Date(product.spec?.release_date);
+  if (release > now) {
+    errors.releaseDate = "Ngày phát hành phải là hiện tại hoặc quá khứ.";
+  }
+
+  return errors;
+};
+
 const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
   // ✅ Tự động tính giá sau khi giảm khi giá hoặc % thay đổi
   useEffect(() => {
