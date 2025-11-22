@@ -3,34 +3,18 @@ import { Package, User, Mail, DollarSign, Calendar, Shield } from "lucide-react"
 import GenericTableView from "../common_components/GenericTableView";
 import OrderStatusBagde from "../common_components/badges/OrderStatusBagde";
 
-const OrderTableView = ({ orders = [], onDelete }) => (
+const OrderTableView = ({ orders = [], onEdit, onDelete }) => (
   <GenericTableView
     data={orders}
     entityName="đơn hàng"
     onDelete={onDelete}
+    onEdit={onEdit}
     columns={[
-      { key: "id", label: "Mã" },
-      { key: "code", label: "Mã đơn", icon: Package },
+      { key: "id", label: "Mã đơn", icon: Package },
       {
-        key: "customerName",
+        key: "userId",
         label: "Khách hàng",
         icon: User,
-      },
-      {
-        key: "email",
-        label: "Email",
-        icon: Mail,
-        render: (o) => (
-          <a href={`mailto:${o.email}`} className="text-blue-600 hover:underline">
-            {o.email}
-          </a>
-        ),
-      },
-      {
-        key: "total",
-        label: "Tổng tiền",
-        icon: DollarSign,
-        render: (o) => o.total?.toLocaleString("vi-VN") + " ₫",
       },
       {
         key: "payment",
@@ -38,10 +22,16 @@ const OrderTableView = ({ orders = [], onDelete }) => (
         icon: Shield,
       },
       {
+        key: "totalPrice",
+        label: "Tổng tiền",
+        icon: DollarSign,
+        render: (o) => o.totalPrice?.toLocaleString("vi-VN") + " ₫",
+      },
+      {
         key: "status",
         label: "Trạng thái",
         icon: Shield,
-        render: (o) => <OrderStatusBagde status={o.status} />,
+        render: (o) => <OrderStatusBagde order={o} />,
       },
       {
         key: "createdDate",

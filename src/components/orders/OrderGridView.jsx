@@ -31,7 +31,7 @@ const OrderGridView = ({ orders = [], onDelete }) => (
           <strong>Thanh toán:</strong> {o.payment}
         </p>
         <p className="text-sm text-gray-700 mb-1 flex items-center gap-2">
-          <strong>Trạng thái:</strong> <OrderStatusBagde status={o.status} />
+          <strong>Trạng thái:</strong> <OrderStatusBagde order={o} />
         </p>
         <p className="text-xs text-gray-500 mt-2">
           {new Date(o.createdDate).toLocaleString("vi-VN")}

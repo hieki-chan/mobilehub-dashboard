@@ -70,7 +70,7 @@ const ProductTableView = ({ products = [], onDelete, onEdit, onView }) => {
           icon: Star,
           render: (p) => (
             <button
-              onClick={() => navigate(`/products/${p.id}/reviews`)}
+              onClick={() => navigate(`/reviews?product=${p.id}`)}
               className="flex items-center gap-1 text-yellow-500 hover:text-yellow-600 transition-colors"
             >
               <Star

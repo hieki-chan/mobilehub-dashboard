@@ -5,8 +5,6 @@ import { CheckCircle, Clock, DollarSign, ShoppingBag } from "lucide-react";
 import Header from "../components/common_components/Header";
 import StatCards from "../components/common_components/StatCards";
 
-import DailyOrdersChart from "../components/orders/DailyOrdersChart";
-import StatusDistributionChart from "../components/orders/StatusDistributionChart";
 import OrderListSection from "../components/orders/OrderListSection";
 
 const Orders_Stat = {
@@ -60,14 +58,6 @@ const OrdersPage = () => {
             color="#ef4444"
           />
         </motion.div>
-
-        
-
-        {/* Biểu đồ đơn hàng theo ngày và trạng thái đơn hàng */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7">
-          <DailyOrdersChart />
-          <StatusDistributionChart />
-        </div>
 
         {/* Bảng chi tiết đơn hàng */}
         <OrderListSection />

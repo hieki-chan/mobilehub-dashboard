@@ -15,6 +15,9 @@ import UserDemographicChart from "../components/users/UserDemographicChart";
 import SalesTrendChart from "../components/products/SalesTrendChart";
 import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
 
+import DailyOrdersChart from "../components/orders/DailyOrdersChart";
+import StatusDistributionChart from "../components/orders/StatusDistributionChart";
+
 const AnalyticsPage = () => {
   return (
     <div className="flex-1 overflow-auto relative z-10 bg-gray-900">
@@ -46,6 +49,12 @@ const AnalyticsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <SalesTrendChart />
           <CategoryDistributionChart />
+        </div>
+
+        {/* Biểu đồ đơn hàng theo ngày và trạng thái đơn hàng */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7">
+          <DailyOrdersChart />
+          <StatusDistributionChart />
         </div>
 
         {/* Thông tin chi tiết AI */}

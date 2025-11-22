@@ -5,6 +5,7 @@ import {
   Settings,
   ShoppingBag,
   ShoppingCart,
+  Star,
   TrendingUp,
   Users,
   Menu,
@@ -17,6 +18,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 const SIDEBAR_ITEMS = [
   { name: "Tổng quan", icon: BarChart2, color: "#6366f1", href: "/" },
   { name: "Sản phẩm", icon: ShoppingBag, color: "#8B5CF6", href: "/products" },
+  { name: "Đánh giá", icon: Star, color: "#f6ae5cff", href: "/reviews" },
   { name: "Người dùng", icon: Users, color: "#EC4899", href: "/users" },
   { name: "Doanh số", icon: DollarSign, color: "#10B981", href: "/sales" },
   { name: "Đơn hàng", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },

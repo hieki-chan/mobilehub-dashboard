@@ -105,6 +105,11 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
     return filteredProducts.slice(start, start + itemsPerPage);
   };
 
+  const handleView = async (item) =>
+  {
+    console.log(item)
+  }
+
   const handleDelete = async (id) => {
     const confirmed = await showPopupConfirm(
       "Xác nhận xoá sản phẩm",
@@ -206,12 +211,14 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
         <ProductTableView
           products={getPageProducts()}
           onDelete={handleDelete}
+          onView={handleView}
           onEdit={onEditClick}
         />
       ) : (
         <ProductGridView
           products={getPageProducts()}
           onDelete={handleDelete}
+          onView={handleView}
           onEdit={onEditClick}
         />
       )}

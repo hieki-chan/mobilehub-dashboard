@@ -140,7 +140,7 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
                   </button>
                   
                   <button
-                    onClick={() => onView && onView(item)}
+                    onClick={() => onView && onView(item.id)}
                     className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded"
                     title="Xem chi tiết"
                   >
