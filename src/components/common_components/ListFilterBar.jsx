@@ -2,7 +2,7 @@ import React from "react";
 
 const ListFilterBar = ({ filters = [] }) => {
   return (
-    <div className="sticky top-[128px] z-30 p-4 border-b border-gray-200 bg-gray-50 flex flex-wrap items-center gap-3 sm:gap-4">
+    <div className="top-[128px] z-30 p-4 border-b border-gray-200 bg-gray-50 flex flex-wrap items-center gap-3 sm:gap-4">
       {filters.map((f, i) => (
         <div
           key={i}

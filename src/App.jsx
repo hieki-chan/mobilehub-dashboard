@@ -47,7 +47,7 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               <Route path="/" element={<OverviewPage />} />
               <Route path="/products" element={<ProductsPage />} />
-              <Route path="/products/:id/reviews" element={<ProductRatingPage />} />
+              <Route path="/reviews" element={<ProductRatingPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/sales" element={<SalesPage />} />
               <Route path="/orders" element={<OrdersPage />} />

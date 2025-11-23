@@ -1,219 +1,222 @@
-import React, { useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { MessageCircle, Filter, Star } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { MessageCircle, Filter, Star, Search } from "lucide-react";
 import RatingItem from "./RatingItem";
-
-// fake data
-const fakeRatings = [
-  {
-    id: 1,
-    productId: 101,
-    product: "Tai nghe Sony WH-1000XM5",
-    username: "Nguyễn Văn A",
-    rating: 5,
-    comment: "Chất lượng âm thanh tuyệt vời, pin lâu.",
-    date: "2025-10-02",
-    reply: "Cảm ơn bạn A! Mong bạn tiếp tục ủng hộ sản phẩm của Sony.",
-    productImage: "https://cdn.tgdd.vn/Products/Images/54/284946/sony-wh1000xm5-den-thumb-600x600.jpg",
-  },
-  {
-    id: 2,
-    productId: 102,
-    product: "iPhone 15 Pro",
-    username: "Trần Thị B",
-    rating: 4,
-    comment: "Máy chạy mượt nhưng hơi nóng.",
-    date: "2025-09-27",
-    reply: null,
-    productImage: "https://cdn.tgdd.vn/Products/Images/42/306996/iphone-15-pro-max-titan-thumb-600x600.jpg",
-  },
-  {
-    id: 3,
-    productId: 101,
-    product: "Tai nghe Sony WH-1000XM5",
-    username: "Phạm Minh C",
-    rating: 5,
-    comment: "Thiết kế mỏng nhẹ, pin cực trâu.",
-    date: "2025-09-18",
-    reply: "Cảm ơn anh Minh C đã tin tưởng sản phẩm của Sony!",
-    productImage: "https://cdn.tgdd.vn/Products/Images/54/284946/sony-wh1000xm5-den-thumb-600x600.jpg",
-  },
-];
+import { getRatings, replyRating, updateRating, deleteRatingReply } from "../../api/ratingApi";
 
 const ProductRatingListSection = () => {
-  const { productId } = useParams(); // 👉 lấy productId từ URL nếu có
+  const [ratings, setRatings] = useState([]);
 
-  const [ratings, setRatings] = useState(fakeRatings);
   const [replyingId, setReplyingId] = useState(null);
   const [replyText, setReplyText] = useState("");
-  const [filterStar, setFilterStar] = useState("ALL");
-  const [filterReply, setFilterReply] = useState("ALL");
-  const [sortBy, setSortBy] = useState("newest");
-  const [filterProduct, setFilterProduct] = useState("ALL");
 
-  // Nếu có productId trong URL => ưu tiên lọc theo đó
-  const filteredRatings = useMemo(() => {
-    let result = [...ratings];
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editStars, setEditStars] = useState(0);
 
-    // 🔹 Tự động lọc theo productId nếu có trên URL
-    if (productId) result = result.filter((r) => r.productId === Number(productId));
-    else if (filterProduct !== "ALL")
-      result = result.filter((r) => r.productId === Number(filterProduct));
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [loading, setLoading] = useState(false);
 
-    if (filterStar !== "ALL") result = result.filter((r) => r.rating === Number(filterStar));
-    if (filterReply === "REPLIED") result = result.filter((r) => r.reply);
-    else if (filterReply === "UNREPLIED") result = result.filter((r) => !r.reply);
+  const productId = searchParams.get("product");
+  const filterStar = searchParams.get("stars") || "ALL";
+  const filterReply = searchParams.get("replyStatus") || "ALL";
+  const sortBy = searchParams.get("sortBy") || "newest";
+  const searchBy = searchParams.get("searchBy") || "product";
+  const searchQuery = searchParams.get("searchQuery") || "";
 
-    switch (sortBy) {
-      case "oldest":
-        result.sort((a, b) => new Date(a.date) - new Date(b.date));
-        break;
-      case "highest":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
-      case "lowest":
-        result.sort((a, b) => a.rating - b.rating);
-        break;
-      default:
-        result.sort((a, b) => new Date(b.date) - new Date(a.date));
-    }
-    return result;
-  }, [ratings, filterStar, filterReply, sortBy, filterProduct, productId]);
+  const [searchInput, setSearchInput] = useState(searchQuery);
+  useEffect(() => setSearchInput(searchQuery), [searchQuery]);
+
+  const updateParam = (key, value) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set(key, value);
+    else params.delete(key);
+    setSearchParams(params);
+  };
+
+  const handleSearch = () => updateParam("searchQuery", searchInput.trim());
+  const handleSearchByChange = (newSearchBy) => {
+    updateParam("searchBy", newSearchBy);
+    if (searchQuery.trim()) updateParam("searchQuery", searchInput.trim());
+  };
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      setLoading(true);
+      try {
+        const data = await getRatings({
+          page: 0,
+          size: 50,
+          sortBy,
+          stars: filterStar !== "ALL" ? filterStar : undefined,
+          replyStatus: filterReply !== "ALL" ? filterReply : undefined,
+          searchBy,
+          searchQuery,
+          productId,
+        });
+        setRatings(data.content ?? data ?? []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRatings();
+  }, [productId, filterStar, filterReply, sortBy, searchBy, searchQuery]);
 
   const handleStartReply = (id, currentReply = "") => {
     setReplyingId(id);
     setReplyText(currentReply);
+    setEditingId(null);
   };
   const handleCancelReply = () => {
     setReplyingId(null);
     setReplyText("");
   };
-  const handleSubmitReply = (id) => {
+  const handleSubmitReply = async (id) => {
     if (!replyText.trim()) return;
-    setRatings((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, reply: replyText.trim() } : r))
-    );
-    handleCancelReply();
+    try {
+      const updated = await replyRating(id, replyText.trim());
+      setRatings((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, reply: updated.reply } : r))
+      );
+      handleCancelReply();
+    } catch (err) {
+      console.error(err);
+      alert("Có lỗi khi gửi phản hồi!");
+    }
   };
 
-  // Lấy thông tin sản phẩm (khi ở /products/:id/ratings)
-  const productInfo = productId
-    ? ratings.find((r) => r.productId === Number(productId))
-    : null;
+  const handleStartEdit = (rating) => {
+    setEditingId(rating.id);
+    setEditText(rating.comment);
+    setEditStars(rating.stars);
+    setReplyingId(null);
+  };
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
+    setEditStars(0);
+  };
+  const handleSubmitEdit = async (id) => {
+    if (!editText.trim()) return;
+    try {
+      const updated = await updateRating(id, { comment: editText.trim(), stars: editStars });
+      setRatings((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, comment: updated.comment, stars: updated.stars } : r))
+      );
+      handleCancelEdit();
+    } catch (err) {
+      console.error(err);
+      alert("Có lỗi khi cập nhật đánh giá!");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Bạn có chắc muốn xoá phản hồi này?")) return;
+    try {
+      await deleteRatingReply(id);
+      setRatings((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, reply: null } : r))
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Có lỗi khi xoá phản hồi!");
+    }
+  };
+
+  const productInfo = productId ? ratings[0] : null;
 
   return (
-    <div className="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
-      {/* Nếu đang ở trang riêng sản phẩm */}
-      {productInfo && (
-        <div className="flex items-center gap-4 mb-6 border-b pb-4">
-          <img
-            src={productInfo.productImage}
-            alt={productInfo.product}
-            className="w-20 h-20 object-cover rounded-lg border"
-          />
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">{productInfo.product}</h3>
-            <div className="flex items-center gap-1 mt-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  className={
-                    i < Math.round(
-                      ratings
-                        .filter((r) => r.productId === Number(productId))
-                        .reduce((acc, r) => acc + r.rating, 0) /
-                        ratings.filter((r) => r.productId === Number(productId)).length
-                    )
-                      ? "text-yellow-400 fill-yellow-400"
-                      : "text-gray-300"
-                  }
-                />
-              ))}
-              <span className="ml-2 text-sm text-gray-600">
-                {ratings.filter((r) => r.productId === Number(productId)).length} đánh giá
-              </span>
-            </div>
+   <div className="bg-white shadow-sm rounded-2xl p-6 border border-gray-100">
+    {productInfo && (
+      <div className="flex items-center gap-4 mb-6 border-b pb-4">
+        <img
+          src={productInfo.productImage}
+          alt={productInfo.product}
+          className="w-20 h-20 object-cover rounded-lg border"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">{productInfo.product}</h3>
+          <div className="flex items-center gap-1 mt-1">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                size={16}
+                className={i < productInfo.stars ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}
+              />
+            ))}
+            <span className="ml-2 text-sm text-gray-600">{ratings.length} đánh giá</span>
           </div>
         </div>
-      )}
+      </div>
+    )}
 
-      {/* Header lọc */}
+    {/* BỎ ĐIỀU KIỆN !productId - LUÔN HIỂN THỊ FILTERS */}
+    <div className="flex flex-col gap-3 mb-5">
       {!productId && (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <MessageCircle size={18} /> Danh sách đánh giá
-          </h2>
-
-          <div className="flex flex-wrap items-center gap-3 text-sm">
-            <div className="flex items-center gap-1">
-              <Filter size={14} className="text-gray-500" />
-              <span className="font-medium text-gray-600">Lọc:</span>
-            </div>
-
-            {/* Lọc theo sản phẩm */}
-            <select
-              value={filterProduct}
-              onChange={(e) => setFilterProduct(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-blue-400"
-            >
-              <option value="ALL">Tất cả sản phẩm</option>
-              {[...new Set(ratings.map((r) => r.productId))].map((id) => {
-                const p = ratings.find((r) => r.productId === id);
-                return (
-                  <option key={id} value={id}>
-                    {p.product}
-                  </option>
-                );
-              })}
-            </select>
-
-            {/* Các bộ lọc khác */}
-            <select
-              value={filterStar}
-              onChange={(e) => setFilterStar(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-blue-400"
-            >
-              <option value="ALL">Tất cả sao</option>
-              {[5, 4, 3, 2, 1].map((s) => (
-                <option key={s} value={s}>
-                  {s} sao
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={filterReply}
-              onChange={(e) => setFilterReply(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-blue-400"
-            >
-              <option value="ALL">Tất cả phản hồi</option>
-              <option value="REPLIED">Đã phản hồi</option>
-              <option value="UNREPLIED">Chưa phản hồi</option>
-            </select>
-
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 focus:ring-1 focus:ring-blue-400"
-            >
-              <option value="newest">Mới nhất</option>
-              <option value="oldest">Cũ nhất</option>
-              <option value="highest">Điểm cao nhất</option>
-              <option value="lowest">Điểm thấp nhất</option>
-            </select>
-          </div>
-        </div>
+        <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          <MessageCircle size={18} /> Danh sách đánh giá
+        </h2>
       )}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 w-full">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-1/2">
+          <div className="flex items-center gap-1">
+            <Filter size={14} className="text-gray-500" />
+            <span className="font-medium text-gray-600">Lọc:</span>
+          </div>
+          <select value={filterStar} onChange={(e) => updateParam("stars", e.target.value)} className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-blue-400">
+            <option value="ALL">Tất cả sao</option>
+            {[5,4,3,2,1].map((s)=> <option key={s} value={s}>{s} sao</option>)}
+          </select>
+          <select value={filterReply} onChange={(e) => updateParam("replyStatus", e.target.value)} className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-blue-400">
+            <option value="ALL">Tất cả phản hồi</option>
+            <option value="REPLIED">Đã phản hồi</option>
+            <option value="UNREPLIED">Chưa phản hồi</option>
+          </select>
+          <select value={sortBy} onChange={(e) => updateParam("sortBy", e.target.value)} className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-blue-400">
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Cũ nhất</option>
+            <option value="highest">Điểm cao nhất</option>
+            <option value="lowest">Điểm thấp nhất</option>
+          </select>
+        </div>
 
-      {/* Danh sách đánh giá */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2 w-full sm:w-1/2 mt-2 sm:mt-0">
+          <div className="flex w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder={`Tìm kiếm theo ${searchBy === "product" ? "tên sản phẩm" : "tên người dùng"}...`}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="flex-1 border border-gray-300 rounded-l-md px-2 py-1 text-sm focus:ring-1 focus:ring-blue-400 h-8"
+            />
+            <button
+              onClick={handleSearch}
+              className="w-8 h-8 flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white rounded-r-md"
+            >
+              <Search size={16} />
+            </button>
+          </div>
+          <select
+            value={searchBy}
+            onChange={(e) => handleSearchByChange(e.target.value)}
+            className="w-full sm:w-auto border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-1 focus:ring-orange-400 mt-2 sm:mt-0 h-8"
+          >
+            <option value="product">Theo tên sản phẩm</option>
+            <option value="user">Theo tên người dùng</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
       <div className="space-y-5">
-        {filteredRatings.length === 0 ? (
-          <p className="text-gray-500 text-sm italic text-center py-6">
-            Không có đánh giá nào phù hợp.
-          </p>
+        {loading ? (
+          <p className="text-gray-500 text-sm italic text-center py-6">Đang tải...</p>
+        ) : ratings.length === 0 ? (
+          <p className="text-gray-500 text-sm italic text-center py-6">Không có đánh giá nào phù hợp.</p>
         ) : (
-          filteredRatings.map((r) => (
+          ratings.map((r) => (
             <RatingItem
               key={r.id}
               rating={r}
@@ -223,6 +226,15 @@ const ProductRatingListSection = () => {
               onCancelReply={handleCancelReply}
               onSubmitReply={handleSubmitReply}
               onReplyTextChange={setReplyText}
+              editingId={editingId}
+              editText={editText}
+              editStars={editStars}
+              onStartEdit={handleStartEdit}
+              onCancelEdit={handleCancelEdit}
+              onSubmitEdit={handleSubmitEdit}
+              onEditTextChange={setEditText}
+              onEditStarsChange={setEditStars}
+              onDelete={handleDelete}
             />
           ))
         )}

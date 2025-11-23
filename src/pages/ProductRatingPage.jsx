@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Star, ThumbsUp, MessageSquare, AlertCircle } from "lucide-react";
 
@@ -14,13 +14,17 @@ const Rating_Stat = {
 };
 
 const ProductRatingPage = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchBy, setSearchBy] = useState("product");
+
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
+
   return (
     <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
       <Header
         path={[
           { label: "Mobilehub", to: "/" },
-          { label: "Sản phẩm", to: "/products" },
-          { label: "Đánh giá", to: "" }, 
+          { label: "Đánh giá", to: "/reviews" },
         ]}
         userName="Admin"
       />
@@ -59,8 +63,8 @@ const ProductRatingPage = () => {
           />
         </motion.div>
 
-
-        <ProductRatingListSection />
+        {/* Danh sách đánh giá */}
+        <ProductRatingListSection searchQuery={searchQuery} searchBy={searchBy} />
       </main>
     </div>
   );

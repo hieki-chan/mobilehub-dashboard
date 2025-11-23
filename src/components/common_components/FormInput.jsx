@@ -1,6 +1,11 @@
 // src/components/common_components/FormInputs.jsx
 import React from "react";
 
+const parseValue = (val, type) => {
+  if (type === "number") return Number(val);
+  return val;
+};
+
 /**
  * Input component — hỗ trợ nested key (vd: spec.os, discount.startDate)
  * và tự động xử lý format ngày (YYYY-MM-DD)
@@ -44,8 +49,10 @@ export const Input = ({
         className="w-full px-3 py-2 rounded-md border border-gray-300 bg-white text-gray-900 focus:border-gray-900 focus:ring-2 focus:ring-gray-900 outline-none transition"
         value={rawValue}
         onChange={(e) =>
-          setNewProduct(setValue(newProduct, keyName, e.target.value))
-        }
+          setNewProduct(
+            setValue(newProduct, keyName, parseValue(e.target.value, type))
+          )
+        } 
       />
     </div>
   );
