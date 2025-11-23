@@ -39,9 +39,13 @@ const LoginPage = () => {
 
       <div className="relative z-10 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-2xl p-8 w-[90%] max-w-md mx-auto">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-md">
-            M
-          </div>
+          {/* chx sua de day cn lam not */}
+          <img
+            src="/src/assets/Favicon"
+            alt="Logo"
+            className="w-14 h-14 rounded-full object-cover shadow-md"
+          />
+
           <h2 className="mt-3 text-2xl font-bold text-gray-800">
             MobileHub Admin
           </h2>
@@ -58,7 +62,10 @@ const LoginPage = () => {
           <div>
             <label className="block mb-1 text-gray-700 text-sm">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <Mail
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={18}
+              />
               <input
                 type="email"
                 placeholder="admin@example.com"
@@ -74,7 +81,10 @@ const LoginPage = () => {
           <div>
             <label className="block mb-1 text-gray-700 text-sm">Mật khẩu</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <Lock
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={18}
+              />
               <input
                 type="password"
                 placeholder="••••••••"
@@ -110,10 +120,11 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-md flex items-center justify-center ${loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gray-900 hover:bg-orange-600 hover:shadow-orange-300/40"
-              }`}
+            className={`w-full py-2 rounded-lg text-white font-medium transition-all duration-200 shadow-md flex items-center justify-center ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gray-900 hover:bg-orange-600 hover:shadow-orange-300/40"
+            }`}
           >
             {loading ? (
               <>

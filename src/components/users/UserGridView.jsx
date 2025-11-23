@@ -20,7 +20,6 @@ const UserGridView = ({ users = [], onDelete }) => {
     }
   };
 
-
   return (
     <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {users.map((user, index) => (
@@ -63,8 +62,31 @@ const UserGridView = ({ users = [], onDelete }) => {
             <button className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded">
               <Edit size={16} />
             </button>
+
             <button
-              onClick={() => onDelete(user.id)}
+              onClick={async () => {
+                if (!window.confirm("Bạn có chắc muốn xóa người dùng này?"))
+                  return;
+
+                try {
+                  const response = await fetch(`/api/users/${user.id}`, {
+                    method: "DELETE",
+                  });
+
+                  if (response.ok) {
+                    alert("Xóa người dùng thành công");
+                    onDelete(user.id); // call parent to remove user from list
+                  } else if (response.status === 400) {
+                    alert("Không thể xóa người dùng này");
+                  } else if (response.status === 500) {
+                    alert("Lỗi máy chủ");
+                  } else {
+                    alert("Xóa thất bại");
+                  }
+                } catch {
+                  alert("Lỗi kết nối đến máy chủ");
+                }
+              }}
               className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
             >
               <Trash2 size={16} />

@@ -24,7 +24,9 @@ const UserTableView = ({ users = [], onDelete, onEdit }) => (
             >
               {u.avatar}
             </div>
-            <span className="text-sm font-medium text-gray-900">{u.username}</span>
+            <span className="text-sm font-medium text-gray-900">
+              {u.username}
+            </span>
           </div>
         ),
       },
@@ -34,7 +36,10 @@ const UserTableView = ({ users = [], onDelete, onEdit }) => (
         label: "Email",
         icon: Mail,
         render: (u) => (
-          <a href={`mailto:${u.email}`} className="text-blue-600 hover:underline">
+          <a
+            href={`mailto:${u.email}`}
+            className="text-blue-600 hover:underline"
+          >
             {u.email}
           </a>
         ),
