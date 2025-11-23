@@ -10,6 +10,7 @@ import {
 const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
   const [newProduct, setNewProduct] = useState({});
   const [loading, setLoading] = useState(false);
+  const [errorPopup, setErrorPopup] = useState("");
 
   const mode = productId ? "edit" : "add";
   const title = mode === "edit" ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới";
@@ -72,10 +73,29 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
   const handleSubmit = async () => {
     // special: validation before api call
     const errors = {};
+    // special: validate number inputs
+    const numberFields = [
+      { value: newProduct.price, name: "Giá" },
+      { value: newProduct.discount?.valueInPercent, name: "Phần trăm giảm" },
+    ];
+
+    for (const field of numberFields) {
+      const num = parseFloat(field.value);
+
+      if (isNaN(num)) {
+        return setErrorPopup(`${field.name} phải là số hợp lệ.`);
+      }
+
+      if (num < 0) {
+        return setErrorPopup(`${field.name} không được nhỏ hơn 0.`);
+      }
+    }
 
     // required fields
     if (
-      !newProduct.price ||
+      newProduct.price === "" ||
+      newProduct.price === undefined ||
+      newProduct.price === null ||
       !newProduct.discount?.valueInPercent ||
       !newProduct.discount?.startDate ||
       !newProduct.discount?.endDate ||
@@ -111,7 +131,7 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
     }
 
     if (Object.keys(errors).length > 0) {
-      return alert(Object.values(errors)[0]);
+      return setErrorPopup(Object.values(errors)[0]);
     }
 
     try {
@@ -123,6 +143,22 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
       alert("Không thể lưu sản phẩm!");
     }
   };
+
+  if (errorPopup) {
+    return (
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+          <p className="text-gray-800 font-medium">{errorPopup}</p>
+          <button
+            onClick={() => setErrorPopup("")}
+            className="mt-4 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md"
+          >
+            Đóng
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!isOpen) return null;
 
