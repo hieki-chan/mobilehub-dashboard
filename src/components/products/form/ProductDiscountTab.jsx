@@ -39,18 +39,22 @@ export const validateProductDiscount = (product) => {
   return errors;
 };
 
-const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
+const ProductDiscountTab = ({ newProduct, setNewProduct, mode }) => {
+  const isView = mode === "view";
   // ✅ Tự động tính giá sau khi giảm khi giá hoặc % thay đổi
   useEffect(() => {
+    if (isView) return;
+
     const price = parseFloat(newProduct.price) || 0;
     const discountPercent =
       parseFloat(newProduct.discount?.valueInPercent) || 0;
     const discountedPrice = price - (price * discountPercent) / 100;
+
     setNewProduct((prev) => ({
       ...prev,
       discountPrice: discountedPrice > 0 ? Math.round(discountedPrice) : 0,
     }));
-  }, [newProduct.price, newProduct.discount?.valueInPercent]);
+  }, [newProduct.price, newProduct.discount?.valueInPercent, isView]);
 
   return (
     <div className="space-y-6">
@@ -66,7 +70,8 @@ const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
           min={0}
           max={100}
           newProduct={newProduct}
-          setNewProduct={setNewProduct}
+          setNewProduct={isView ? () => {} : setNewProduct} // ✅ SỬA
+          disabled={isView} // ✅ THÊM
         />
       </div>
 
@@ -76,14 +81,16 @@ const ProductDiscountTab = ({ newProduct, setNewProduct }) => {
           keyName="discount.startDate"
           type="datetime-local"
           newProduct={newProduct}
-          setNewProduct={setNewProduct}
+          setNewProduct={isView ? () => {} : setNewProduct} // ✅ SỬA
+          disabled={isView} // ✅ THÊM
         />
         <Input
           label="Ngày kết thúc"
           keyName="discount.endDate"
           type="datetime-local"
           newProduct={newProduct}
-          setNewProduct={setNewProduct}
+          setNewProduct={isView ? () => {} : setNewProduct} // ✅ SỬA
+          disabled={isView} // ✅ THÊM
         />
       </div>
     </div>

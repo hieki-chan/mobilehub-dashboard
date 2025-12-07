@@ -4,7 +4,7 @@ const ToogleSwitch = ({ Label, isOn, onToggle }) => {
   return (
     <div className="flex items-center justify-between py-3">
       {/* Nhãn hiển thị */}
-      <span className="text-gray-300">{Label}</span>
+      <span className="text-black font-semibold">{Label}</span>
 
       {/* Nút chuyển trạng thái */}
       <button

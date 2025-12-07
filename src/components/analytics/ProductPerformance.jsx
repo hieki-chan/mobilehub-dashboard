@@ -21,12 +21,12 @@ const Product_Performance_Data = [
 const ProductPerformance = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700 mt-7"
+      className="bg-white shadow-lg rounded-xl p-6 border-2 border-black mt-7"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.4 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-xl font-semibold text-gray-900 mb-4">
         Hiệu suất sản phẩm
       </h2>
 
@@ -34,18 +34,18 @@ const ProductPerformance = () => {
         <ResponsiveContainer>
           <BarChart data={Product_Performance_Data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9CA3AF" />
-            <YAxis stroke="#9CA3AF" />
+            <XAxis dataKey="name" stroke="#111827" />
+            <YAxis stroke="#111827" />
             <Tooltip
               formatter={(value, name) => [
                 `${value} đơn vị`,
                 name.replaceAll("_", " "),
               ]}
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4B5563",
+                backgroundColor: "#ffffff",
+                borderColor: "#000",
               }}
-              itemStyle={{ color: "#E5E7EB" }}
+              itemStyle={{ color: "#111827" }}
             />
             <Legend formatter={(value) => value.replaceAll("_", " ")} />
             <Bar dataKey="Doanh_số" fill="#8B5CF6" />

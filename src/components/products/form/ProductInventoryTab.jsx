@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { AlertTriangle, Plus, Edit3 } from "lucide-react";
 
-const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
+const ProductInventoryTab = ({ newProduct, setNewProduct, mode }) => {
+  const isView = mode === "view";
   const [quantityToAdd, setQuantityToAdd] = useState("");
   const [showWarning, setShowWarning] = useState(false);
 
@@ -10,6 +11,7 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
 
   // === Nhập thêm hàng ===
   const handleAddStock = () => {
+    if (isView) return;
     if (!quantityToAdd || isNaN(quantityToAdd)) return;
     const updatedQty = currentQty + parseInt(quantityToAdd);
     setNewProduct((prev) => ({
@@ -24,6 +26,7 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
 
   // === Sửa số lượng trực tiếp ===
   const handleQuantityChange = (e) => {
+    if (isView) return;
     setShowWarning(true);
     const value = e.target.value;
     setNewProduct((prev) => ({
@@ -50,15 +53,17 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
             <input
               type="number"
               value={importPrice}
-              onChange={(e) =>
+              disabled={isView}
+              onChange={(e) => {
+                if (isView) return;
                 setNewProduct((prev) => ({
                   ...prev,
                   inventory: {
                     ...prev.inventory,
                     import_price: Number(e.target.value),
                   },
-                }))
-              }
+                }));
+              }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Nhập giá nhập..."
             />
@@ -72,6 +77,7 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
               <input
                 type="number"
                 value={currentQty}
+                disabled={isView}
                 onChange={handleQuantityChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               />
@@ -84,7 +90,8 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
           <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded-md flex items-center gap-2 text-yellow-800">
             <AlertTriangle size={18} />
             <p className="text-sm">
-              ⚠️ Việc chỉnh sửa số lượng thủ công có thể gây sai lệch dữ liệu kho. Hãy xác nhận thay đổi trước khi lưu.
+              ⚠️ Việc chỉnh sửa số lượng thủ công có thể gây sai lệch dữ liệu
+              kho. Hãy xác nhận thay đổi trước khi lưu.
             </p>
           </div>
         )}
@@ -103,14 +110,20 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
             <input
               type="number"
               value={quantityToAdd}
+              disabled={isView}
               onChange={(e) => setQuantityToAdd(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="VD: 10"
             />
           </div>
           <button
+            disabled={isView}
             onClick={handleAddStock}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+              isView
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 text-white"
+            }`}
           >
             <Plus size={18} /> Nhập hàng
           </button>

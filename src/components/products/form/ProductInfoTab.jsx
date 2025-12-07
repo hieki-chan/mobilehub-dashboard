@@ -1,8 +1,9 @@
 import { X } from "lucide-react";
 import { Input, Textarea } from "../../common_components/FormInput";
 
-const ProductInfoTab = ({ newProduct, setNewProduct }) => {
+const ProductInfoTab = ({ newProduct, setNewProduct, mode }) => {
   const isEditMode = !!newProduct?.id;
+  const isView = mode === "view";
   return (
     <div className="space-y-10">
       <section>
@@ -29,7 +30,8 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             label="Tên sản phẩm"
             keyName="name"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <div>
             <label className="block text-sm font-medium text-gray-800 mb-1">
@@ -37,9 +39,11 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             </label>
             <select
               value={newProduct.status || "ACTIVE"}
-              onChange={(e) =>
-                setNewProduct((prev) => ({ ...prev, status: e.target.value }))
-              }
+              disabled={isView}
+              onChange={(e) => {
+                if (isView) return;
+                setNewProduct((prev) => ({ ...prev, status: e.target.value }));
+              }}
               className="w-full px-3 py-2 bg-white text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="ACTIVE">Hoạt động</option>
@@ -52,14 +56,17 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             label="Thương hiệu"
             keyName="spec.brand"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
+
           <Input
             label="Ngày phát hành"
             keyName="spec.release_date"
             type="date"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
 
           {/* Description full width */}
@@ -68,7 +75,8 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             keyName="description"
             rows={3}
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
             className="col-span-2"
           />
         </div>
@@ -83,27 +91,32 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             label="Hệ điều hành"
             keyName="spec.os"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <Input
             label="Bộ xử lý (CPU)"
             keyName="spec.cpu"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <Input
             label="Tốc độ CPU (GHz)"
             keyName="spec.cpu_speed"
-            type="number" // special: change to number input
-            min={0} // special: enforce non negative
+            type="number"
+            min={0}
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
+
           <Input
             label="Đồ họa (GPU)"
             keyName="spec.gpu"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
         </div>
       </section>
@@ -117,27 +130,32 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             label="Camera sau"
             keyName="spec.rear_cam"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <Input
             label="Camera trước"
             keyName="spec.front_cam"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <Input
             label="Độ phân giải màn hình"
             keyName="spec.screen_res"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
+
           <Input
             label="Dung lượng pin (mAh)"
             keyName="spec.battery_cap"
-            type="number" // special: change to number input
-            min={0} // special: enforce non negative
+            type="number"
+            min={0}
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
         </div>
       </section>
@@ -151,22 +169,26 @@ const ProductInfoTab = ({ newProduct, setNewProduct }) => {
             label="Chất liệu khung máy"
             keyName="spec.material"
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
+
           <Input
             label="Kích thước & khối lượng (kg)"
             keyName="spec.size_weight"
-            type="number" // special: change to number input
-            min={0} // special: enforce non negative
+            type="number"
+            min={0}
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
           <Textarea
             label="Tính năng nổi bật"
             keyName="spec.features"
             rows={2}
             newProduct={newProduct}
-            setNewProduct={setNewProduct}
+            setNewProduct={isView ? () => {} : setNewProduct}
+            disabled={isView}
           />
         </div>
       </section>

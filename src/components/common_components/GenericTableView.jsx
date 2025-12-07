@@ -1,14 +1,31 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUp, ArrowDown, CheckCircle, X, Edit, Trash2, Eye } from "lucide-react";
+import {
+  ArrowUp,
+  ArrowDown,
+  CheckCircle,
+  X,
+  Edit,
+  Trash2,
+  Eye,
+} from "lucide-react";
 
-const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, onView, onDelete }) => {
+const GenericTableView = ({
+  data = [],
+  columns = [],
+  entityName = "",
+  onEdit,
+  onView,
+  onDelete,
+}) => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   // === SELECT ===
   const handleToggle = (id) =>
-    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
 
   const handleSelectAll = () => {
     if (selectedIds.length === data.length) setSelectedIds([]);
@@ -25,7 +42,8 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
 
   const sortedData = [...data].sort((a, b) => {
     if (!sortConfig.key) return 0;
-    let aVal = a[sortConfig.key], bVal = b[sortConfig.key];
+    let aVal = a[sortConfig.key],
+      bVal = b[sortConfig.key];
     if (typeof aVal === "string") aVal = aVal.toLowerCase();
     if (typeof bVal === "string") bVal = bVal.toLowerCase();
     if (aVal < bVal) return sortConfig.direction === "asc" ? -1 : 1;
@@ -60,7 +78,11 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
-                if (window.confirm(`Xóa ${selectedIds.length} ${entityName} đã chọn?`)) {
+                if (
+                  window.confirm(
+                    `Xóa ${selectedIds.length} ${entityName} đã chọn?`
+                  )
+                ) {
                   selectedIds.forEach((id) => onDelete(id));
                   setSelectedIds([]);
                 }
@@ -112,7 +134,9 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
           {sortedData.map((item) => (
             <tr
               key={item.id}
-              className={`hover:bg-gray-50 ${selectedIds.includes(item.id) ? "bg-gray-100" : ""}`}
+              className={`hover:bg-gray-50 ${
+                selectedIds.includes(item.id) ? "bg-gray-100" : ""
+              }`}
             >
               <td className="py-3 px-4">
                 <input
@@ -138,15 +162,15 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
                   >
                     <Edit size={16} />
                   </button>
-                  
+
                   <button
-                    onClick={() => onView && onView(item)}
+                    onClick={() => onView && onView(item.id)}
                     className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded"
                     title="Xem chi tiết"
                   >
                     <Eye size={16} />
                   </button>
-                    
+
                   <button
                     onClick={() => onDelete(item.id)}
                     className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded"
@@ -161,7 +185,10 @@ const GenericTableView = ({ data = [], columns = [], entityName = "", onEdit, on
 
           {data.length === 0 && (
             <tr>
-              <td colSpan={columns.length + 2} className="text-center py-6 text-gray-500 text-sm">
+              <td
+                colSpan={columns.length + 2}
+                className="text-center py-6 text-gray-500 text-sm"
+              >
                 Không có {entityName} nào.
               </td>
             </tr>

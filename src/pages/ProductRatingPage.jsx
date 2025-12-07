@@ -15,12 +15,12 @@ const Rating_Stat = {
 
 const ProductRatingPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
+    <div className="flex-1 overflow-auto relative z-10 bg-white text-gray-900">
       <Header
         path={[
           { label: "Mobilehub", to: "/" },
           { label: "Sản phẩm", to: "/products" },
-          { label: "Đánh giá", to: "" }, 
+          { label: "Đánh giá", to: "" },
         ]}
         userName="Admin"
       />
@@ -58,7 +58,6 @@ const ProductRatingPage = () => {
             color="#ef4444"
           />
         </motion.div>
-
 
         <ProductRatingListSection />
       </main>

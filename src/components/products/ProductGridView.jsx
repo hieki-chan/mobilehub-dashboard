@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Edit, Trash2, ChevronDown, CheckCircle, X } from "lucide-react";
+import ProductViewModal from "./form/ProductViewModal";
+import { Eye } from "lucide-react";
 
-const ProductGridView = ({ products = [], onDelete, onEdit }) => {
+const ProductGridView = ({ products = [], onDelete, onEdit, onView }) => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [sortKey, setSortKey] = useState("default");
   const [sortDir, setSortDir] = useState("asc");
   const [sortedProducts, setSortedProducts] = useState([]);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
 
   // === Sắp xếp ===
   useEffect(() => {
@@ -182,6 +186,14 @@ const ProductGridView = ({ products = [], onDelete, onEdit }) => {
 
             <div className="flex justify-end gap-2 mt-3">
               <button
+                onClick={() => {
+                  if (onView) onView(p.id); // ✅ gửi trực tiếp object product
+                }}
+                className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded"
+              >
+                <Eye size={16} />
+              </button>
+              <button
                 onClick={() => onEdit(p)}
                 className="p-1.5 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded"
               >
@@ -203,6 +215,12 @@ const ProductGridView = ({ products = [], onDelete, onEdit }) => {
           </div>
         )}
       </div>
+      {viewModalOpen && (
+        <ProductViewModal
+          product={currentProduct}
+          onClose={() => setViewModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

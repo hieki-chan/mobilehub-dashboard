@@ -5,12 +5,20 @@ import ProductGridView from "./ProductGridView";
 import ProductTableView from "./ProductTableView";
 import { fetchAdminProducts, deleteAdminProduct } from "../../api/ProductApi";
 import { showPopupConfirm } from "../common_components/PopupConfirm";
+import ProductFormModal from "./form/ProductFormModal";
 
-const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
+const ProductListSection = ({
+  onAddClick,
+  onEditClick,
+  onViewClick,
+  reloadFlag,
+}) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [viewMode, setViewMode] = useState("table");
+  const [viewProductId, setViewProductId] = useState(null);
+  const [viewOpen, setViewOpen] = useState(false);
 
   // ==== FILTERS ====
   const [selectedStatus, setSelectedStatus] = useState("ALL");
@@ -19,6 +27,11 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
   // ==== SEARCH ====
   const [searchField, setSearchField] = useState("name");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleViewClick = (id) => {
+    setViewProductId(id);
+    setViewOpen(true);
+  };
 
   const searchOptions = [
     { label: "Tên sản phẩm", value: "name" },
@@ -61,7 +74,7 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
                 ? variant.imageUrl
                 : "https://via.placeholder.com/100x100?text=No+Image",
 
-            category: "Không xác định",
+            category: "Điện thoại",
             stock: 0,
           };
         });
@@ -73,7 +86,6 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
       console.error("❌ Lỗi tải sản phẩm:", err);
     }
   };
-
 
   const handleFilter = () => {
     let result = [...products];
@@ -207,14 +219,27 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
           products={getPageProducts()}
           onDelete={handleDelete}
           onEdit={onEditClick}
+          onView={handleViewClick}
         />
       ) : (
         <ProductGridView
           products={getPageProducts()}
           onDelete={handleDelete}
           onEdit={onEditClick}
+          onView={handleViewClick}
         />
       )}
+
+      {/* ✅ MODAL XEM CHI TIẾT */}
+      <ProductFormModal
+        productId={viewProductId}
+        isOpen={viewOpen}
+        onClose={() => {
+          setViewOpen(false);
+          setViewProductId(null);
+        }}
+        mode="view"
+      />
     </ListPageLayout>
   );
 };

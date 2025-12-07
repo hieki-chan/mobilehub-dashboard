@@ -39,13 +39,9 @@ const LoginPage = () => {
 
       <div className="relative z-10 bg-white/80 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-2xl p-8 w-[90%] max-w-md mx-auto">
         <div className="flex flex-col items-center mb-6">
-          {/* chx sua de day cn lam not */}
-          <img
-            src="/src/assets/Favicon"
-            alt="Logo"
-            className="w-14 h-14 rounded-full object-cover shadow-md"
-          />
-
+          <div className="w-14 h-14 bg-orange-500 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-md">
+            M
+          </div>
           <h2 className="mt-3 text-2xl font-bold text-gray-800">
             MobileHub Admin
           </h2>

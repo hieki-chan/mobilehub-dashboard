@@ -38,23 +38,23 @@ const App = () => {
 
       {/* Content */}
       <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        {/* Public routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-            {/* Private routes */}
-            <Route element={<PrivateRoute />}>
-              <Route path="/" element={<OverviewPage />} />
-              <Route path="/products" element={<ProductsPage />} />
-              <Route path="/products/:id/reviews" element={<ProductRatingPage />} />
-              <Route path="/users" element={<UsersPage />} />
-              <Route path="/sales" element={<SalesPage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-            </Route>
-          </Routes>
+        {/* Private routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/" element={<OverviewPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:id/reviews" element={<ProductRatingPage />} />
+          <Route path="/users" element={<UsersPage />} />
+          <Route path="/sales" element={<SalesPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
+      </Routes>
     </div>
   );
 };

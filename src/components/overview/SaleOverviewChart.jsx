@@ -29,12 +29,12 @@ const Sales_Data = [
 const SaleOverviewChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-5 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-100">
+      <h2 className="text-lg font-medium mb-4 text-black">
         Tổng quan doanh thu
       </h2>
 
@@ -42,8 +42,8 @@ const SaleOverviewChart = () => {
         <ResponsiveContainer width={"100%"} height={"100%"}>
           <LineChart data={Sales_Data}>
             <CartesianGrid strokeDasharray={"3 3"} stroke="#4b5563" />
-            <XAxis dataKey={"name"} stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <XAxis dataKey={"name"} stroke="#000" />
+            <YAxis stroke="#000" />
             <Tooltip
               formatter={(value) => [
                 `${value.toLocaleString()} ₫`,
@@ -54,7 +54,7 @@ const SaleOverviewChart = () => {
                 backgroundColor: "rgba(31, 45, 55, 0.8)",
                 borderColor: "#4b5563",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#000" }}
             />
             <Line
               type="monotone"

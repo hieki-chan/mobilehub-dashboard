@@ -80,33 +80,37 @@ const User_Activity_Data = [
 const UserActivityHeatMap = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-5 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.3, delay: 0.7 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      <h2 className="text-xl font-semibold mb-4 text-black">
         Biểu đồ hoạt động người dùng theo thời gian
       </h2>
 
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <BarChart data={User_Activity_Data}>
-            <CartesianGrid strokeDasharray="3, 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            <CartesianGrid
+              strokeDasharray="3, 3"
+              stroke="#1f2937"
+              strokeWidth={1.5}
+            />
+            <XAxis dataKey="name" stroke="#000" />
+            <YAxis stroke="#000" />
 
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(31, 45, 55, 0.85)",
-                borderColor: "#4b5563",
+                backgroundColor: "#ffffff",
+                borderColor: "#d1d5db",
                 borderRadius: 8,
               }}
-              itemStyle={{ color: "#e5e7eb" }}
-              labelStyle={{ color: "#93c5fd" }}
+              itemStyle={{ color: "#9e9494ff" }}
+              labelStyle={{ color: "#111827" }}
             />
 
-            <Legend wrapperStyle={{ color: "#e5e7eb" }} />
+            <Legend wrapperStyle={{ color: "#000" }} />
 
             <Bar dataKey="0-4h" stackId="a" fill="#5B82F7" />
             <Bar dataKey="4-8h" stackId="a" fill="#8B5CF6" />

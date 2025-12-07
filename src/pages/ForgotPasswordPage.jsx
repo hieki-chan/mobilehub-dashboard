@@ -17,22 +17,24 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-gray-100">
-      <div className="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-bold text-center mb-6">Quên mật khẩu</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 text-gray-900">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-900">
+          Quên mật khẩu
+        </h2>
 
         {message && (
-          <p className="text-green-400 text-sm text-center mb-3">{message}</p>
+          <p className="text-green-600 text-sm text-center mb-3">{message}</p>
         )}
 
         <form onSubmit={handleSendCode} className="space-y-4">
           <div>
-            <label className="block mb-1 text-sm text-gray-300">
+            <label className="block mb-1 text-sm text-gray-700">
               Số điện thoại
             </label>
             <input
               type="tel"
-              className="w-full px-4 py-2 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 rounded-lg bg-gray-100  text-gray-900  focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
@@ -50,7 +52,7 @@ const ForgotPasswordPage = () => {
         <div className="mt-4 text-center text-sm">
           <button
             onClick={() => navigate("/login")}
-            className="text-gray-400 hover:underline"
+            className="text-gray-600 hover:underline"
           >
             Quay lại đăng nhập
           </button>

@@ -17,11 +17,11 @@ import CategoryDistributionChart from "../components/overview/CategoryDistributi
 
 const AnalyticsPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-900">
+    <div className="flex-1 overflow-auto relative z-10 bg-white">
       {/* Tiêu đề trang */}
       <Header title="Bảng điều khiển phân tích" />
 
-      <main className='mx-auto py-6 px-4 lg:px-8'>
+      <main className="mx-auto py-8 px-4 lg:px-10 bg-white">
         <AnalyticsStatCards />
 
         {/* Biểu đồ doanh thu */}

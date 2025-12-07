@@ -9,7 +9,7 @@ import DangerZone from "../components/settings/DangerZone";
 
 const SettingsPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-50">
+    <div className="flex-1 overflow-auto relative z-10 bg-white">
       <Header title="Cài đặt" />
 
       <main className="py-6 px-4 lg:px-4">

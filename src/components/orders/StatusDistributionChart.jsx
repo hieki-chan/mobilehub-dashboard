@@ -21,12 +21,12 @@ const COLORS = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#fed766", "#2ab7ca"];
 const StatusDistributionChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-5 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      <h2 className="text-xl font-semibold mb-4 text-black">
         Phân bố trạng thái đơn hàng
       </h2>
 
@@ -63,7 +63,7 @@ const StatusDistributionChart = () => {
             />
             <Legend
               formatter={(value) => (
-                <span style={{ color: "#e5e7eb" }}>{value}</span>
+                <span style={{ color: "black" }}>{value}</span>
               )}
             />
           </PieChart>

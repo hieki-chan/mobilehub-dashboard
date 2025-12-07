@@ -11,7 +11,7 @@ import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
 
 const OverviewPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-900">
+    <div className="flex-1 overflow-auto relative z-10 bg-white text-gray-900">
       {/* Tiêu đề trang */}
       <Header title="Tổng quan" />
 

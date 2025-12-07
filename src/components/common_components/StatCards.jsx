@@ -15,7 +15,9 @@ const StatCards = ({ name, icon: Icon, value, color, bg, change }) => {
         y: -2,
         boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1)",
       }}
-      className={`bg-white ${bg || ""} overflow-hidden shadow-sm rounded-lg border border-gray-200`}
+      className={`bg-white ${
+        bg || ""
+      } overflow-hidden shadow-sm rounded-lg border-2 border-black`}
     >
       <div className="px-4 py-5 sm:p-6">
         <span className="flex items-center text-sm font-medium text-gray-600">
@@ -40,7 +42,9 @@ const StatCards = ({ name, icon: Icon, value, color, bg, change }) => {
               {Math.abs(change)}%
             </div>
           ) : (
-            <span className="text-sm text-gray-500 italic">Không có thay đổi</span>
+            <span className="text-sm text-gray-500 italic">
+              Không có thay đổi
+            </span>
           )}
         </div>
       </div>

@@ -1,10 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  AlertTriangle,
-  DollarSign,
-  Package,
-  TrendingUp,
-} from "lucide-react";
+import { AlertTriangle, DollarSign, Package, TrendingUp } from "lucide-react";
 import React, { useState } from "react";
 import ProductFormModal from "../components/products/form/ProductFormModal";
 
@@ -16,6 +11,13 @@ const ProductsPage = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
   const [reloadFlag, setReloadFlag] = useState(false);
+  const [viewingProductId, setViewingProductId] = useState(null);
+
+  const handleView = (product) => {
+    setViewingProductId(product.id); // ✅ chỉ cần ID
+    setEditingProductId(null); // ✅ tránh trùng mode edit
+    setAddModalOpen(true); // ✅ mở full modal
+  };
 
   const handleReload = () => {
     setAddModalOpen(false);
@@ -35,8 +37,9 @@ const ProductsPage = () => {
 
   return (
     <div
-      className={`flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900 ${isAddModalOpen ? "overflow-visible" : "overflow-auto"
-        }`}
+      className={`flex-1 overflow-auto relative z-10 bg-white text-gray-900 ${
+        isAddModalOpen ? "overflow-visible" : "overflow-auto"
+      }`}
     >
       <Header
         path={[
@@ -46,15 +49,16 @@ const ProductsPage = () => {
       />
 
       <main
-        className={`relative mx-auto py-6 px-4 lg:px-4 ${isAddModalOpen ? "overflow-visible" : "overflow-auto"
-          }`}
+        className={`relative mx-auto py-6 px-4 lg:px-4 ${
+          isAddModalOpen ? "overflow-visible" : "overflow-auto"
+        }`}
       >
         {/* ===== Thống kê tổng quan ===== */}
         <motion.div
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-7"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: .75 }}
+          transition={{ duration: 0.75 }}
         >
           <StatCards
             name="Tổng sản phẩm"
@@ -86,15 +90,20 @@ const ProductsPage = () => {
         <ProductListSection
           onAddClick={openAddModal}
           onEditClick={(product) => openEditModal(product.id)}
+          onViewClick={handleView}
           reloadFlag={reloadFlag}
         />
 
         {/* ===== Form Modal (Add / Edit) ===== */}
         <ProductFormModal
-          productId={editingProductId}
+          productId={viewingProductId || editingProductId}
           isOpen={isAddModalOpen}
-          onClose={() => setAddModalOpen(false)}
-          onSubmitSuccess={handleReload}
+          mode={viewingProductId ? "view" : "edit"} // ✅ QUAN TRỌNG NHẤT
+          onClose={() => {
+            setAddModalOpen(false);
+            setViewingProductId(null);
+            setEditingProductId(null);
+          }}
         />
       </main>
     </div>

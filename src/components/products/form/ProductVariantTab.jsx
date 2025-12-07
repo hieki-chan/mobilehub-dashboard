@@ -2,7 +2,8 @@ import React, { useMemo } from "react";
 import { Plus, Trash2, Crown, HardDrive, Gauge, Tag } from "lucide-react";
 import ProductImageSection from "./ProductImageSection";
 
-const ProductVariantTab = ({ newProduct, setNewProduct }) => {
+const ProductVariantTab = ({ newProduct, setNewProduct, mode }) => {
+  const isView = mode === "view";
   const variants = newProduct.variants ?? [];
 
   const defaultIdx = useMemo(() => {
@@ -15,7 +16,10 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
     return 0;
   }, [newProduct.defaultVariantIndex, variants.length]);
 
-  const commit = (patch) => setNewProduct((prev) => ({ ...prev, ...patch }));
+  const commit = (patch) => {
+    if (isView) return;
+    setNewProduct((prev) => ({ ...prev, ...patch }));
+  };
 
   const addVariant = () => {
     const v = {
@@ -46,6 +50,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
   };
 
   const updateVariantField = (i, field, value) => {
+    if (isView) return;
     // ===== VALIDATE =====
     // 1) Trường số (storage_cap, ram, price)
     if (["storage_cap", "ram", "price"].includes(field)) {
@@ -98,8 +103,11 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Phiên bản</h3>
         <button
+          disabled={isView}
           onClick={addVariant}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800"
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800 ${
+            isView ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           <Plus size={16} /> Thêm phiên bản
         </button>
@@ -139,8 +147,11 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
 
               <div className="flex items-center gap-2">
                 <button
+                  disabled={isView}
                   onClick={() => setDefaultVariant(i)}
                   className={`inline-flex items-center gap-1 px-3 py-1 rounded-md border ${
+                    isView ? "opacity-50 cursor-not-allowed" : ""
+                  } ${
                     i === defaultIdx
                       ? "bg-yellow-100 border-yellow-400 text-yellow-700"
                       : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -152,8 +163,11 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                 </button>
 
                 <button
+                  disabled={isView}
                   onClick={() => removeVariant(i)}
-                  className="inline-flex items-center gap-1 px-3 py-1 rounded-md border border-red-300 text-red-600 hover:bg-red-50"
+                  className={`inline-flex items-center gap-1 px-3 py-1 rounded-md border border-red-300 text-red-600 hover:bg-red-50 ${
+                    isView ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   <Trash2 size={16} /> Xóa
                 </button>
@@ -162,11 +176,10 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
               <div>
-                <label className="text-sm text-gray-700 block mb-1">
-                  Tên màu
-                </label>
+                <label>Tên màu</label>
                 <input
                   type="text"
+                  disabled={isView}
                   value={v.color_label}
                   onChange={(e) =>
                     updateVariantField(i, "color_label", e.target.value)
@@ -183,6 +196,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
+                    disabled={isView}
                     value={v.color_hex}
                     onChange={(e) =>
                       updateVariantField(i, "color_hex", e.target.value)
@@ -192,6 +206,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                   />
                   <input
                     type="color"
+                    disabled={isView}
                     value={v.color_hex || "#000000"}
                     onChange={(e) =>
                       updateVariantField(i, "color_hex", e.target.value)
@@ -211,6 +226,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                   <input
                     type="number"
                     min={0}
+                    disabled={isView}
                     value={v.storage_cap}
                     onChange={(e) =>
                       updateVariantField(
@@ -233,6 +249,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                   <Gauge size={16} className="text-gray-500" />
                   <input
                     type="number"
+                    disabled={isView}
                     min={0}
                     value={v.ram}
                     onChange={(e) =>
@@ -253,6 +270,7 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
                   <input
                     type="number"
                     min={0}
+                    disabled={isView}
                     value={v.price}
                     onChange={(e) =>
                       updateVariantField(i, "price", Number(e.target.value))
@@ -266,8 +284,9 @@ const ProductVariantTab = ({ newProduct, setNewProduct }) => {
 
             <ProductImageSection
               newProduct={newProduct}
-              setNewProduct={setNewProduct}
+              setNewProduct={isView ? () => {} : setNewProduct}
               activeVariantIndex={i}
+              mode={mode}
             />
           </div>
         ))}

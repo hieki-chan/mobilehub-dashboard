@@ -7,13 +7,25 @@ import {
   updateAdminProduct,
 } from "../../../api/ProductApi";
 
-const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
+const ProductFormModal = ({
+  productId,
+  isOpen,
+  onClose,
+  onSubmitSuccess,
+  mode = null,
+}) => {
   const [newProduct, setNewProduct] = useState({});
   const [loading, setLoading] = useState(false);
   const [errorPopup, setErrorPopup] = useState("");
+  const finalMode = mode || (productId ? "edit" : "add");
 
-  const mode = productId ? "edit" : "add";
-  const title = mode === "edit" ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới";
+  // const mode = productId ? "edit" : "add";
+  const title =
+    finalMode === "edit"
+      ? "Chỉnh sửa sản phẩm"
+      : finalMode === "view"
+      ? "Xem chi tiết sản phẩm"
+      : "Thêm sản phẩm mới";
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
@@ -71,6 +83,7 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
   }, [isOpen, productId]);
 
   const handleSubmit = async () => {
+    if (finalMode === "view") return;
     // special: validation before api call
     const errors = {};
     // special: validate number inputs
@@ -82,25 +95,13 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
     for (const field of numberFields) {
       const num = parseFloat(field.value);
 
-      if (isNaN(num)) {
-        return setErrorPopup(`${field.name} phải là số hợp lệ.`);
-      }
-
       if (num < 0) {
         return setErrorPopup(`${field.name} không được nhỏ hơn 0.`);
       }
     }
 
     // required fields
-    if (
-      newProduct.price === "" ||
-      newProduct.price === undefined ||
-      newProduct.price === null ||
-      !newProduct.discount?.valueInPercent ||
-      !newProduct.discount?.startDate ||
-      !newProduct.discount?.endDate ||
-      !newProduct.spec?.release_date
-    ) {
+    if (newProduct.price === "") {
       errors.required = "Vui lòng không để trống bất kỳ trường nào.";
     }
 
@@ -115,7 +116,7 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
     const end = new Date(newProduct.discount?.endDate);
 
     // start date >= now
-    if (start < now) {
+    if (start.getTime < now.getTime) {
       errors.startDate = "Ngày bắt đầu không được trong quá khứ.";
     }
 
@@ -180,13 +181,15 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
             >
               Hủy
             </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              className="bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded-md text-white font-medium transition"
-            >
-              {mode === "edit" ? "Cập nhật" : "Lưu"}
-            </button>
+            {finalMode !== "view" && (
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="bg-orange-500 hover:bg-orange-600 px-6 py-2 rounded-md text-white font-medium transition"
+              >
+                {finalMode === "edit" ? "Cập nhật" : "Lưu"}
+              </button>
+            )}
           </div>
         </div>
 
@@ -198,6 +201,7 @@ const ProductFormModal = ({ productId, isOpen, onClose, onSubmitSuccess }) => {
               key={newProduct.id || "new"}
               newProduct={newProduct}
               setNewProduct={setNewProduct}
+              mode={finalMode}
             />
           )}
         </div>

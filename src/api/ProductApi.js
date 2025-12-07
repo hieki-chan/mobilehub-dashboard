@@ -27,7 +27,9 @@ export const createAdminProduct = async (productData) => {
   const imageMap = [];
 
   (productData.variants || []).forEach((v) => {
-    const vf = Array.isArray(v.images) ? v.images.filter((x) => x instanceof File) : [];
+    const vf = Array.isArray(v.images)
+      ? v.images.filter((x) => x instanceof File)
+      : [];
     const start = allFiles.length;
     const idxs = vf.map((_, j) => start + j);
     allFiles.push(...vf);
@@ -37,7 +39,10 @@ export const createAdminProduct = async (productData) => {
   const variants = sanitizeVariants(productData.variants || []);
 
   const defaultVariantIndex = Number.isInteger(productData.defaultVariantIndex)
-    ? Math.min(Math.max(productData.defaultVariantIndex, 0), Math.max(variants.length - 1, 0))
+    ? Math.min(
+        Math.max(productData.defaultVariantIndex, 0),
+        Math.max(variants.length - 1, 0)
+      )
     : 0;
 
   const request = {
@@ -60,13 +65,18 @@ export const createAdminProduct = async (productData) => {
 
   console.log(request);
 
-  formData.append("request", new Blob([JSON.stringify(request)], { type: "application/json" }));
+  formData.append(
+    "request",
+    new Blob([JSON.stringify(request)], { type: "application/json" })
+  );
   allFiles.forEach((f) => formData.append("files", f));
   if (allFiles.length === 0) formData.append("files", new Blob([]));
 
   console.log(allFiles.length);
 
-  const res = await api.post(API_BASE_URL_ADMIN, formData, { headers: { "Content-Type": "multipart/form-data" } });
+  const res = await api.post(API_BASE_URL_ADMIN, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res.data;
 };
 

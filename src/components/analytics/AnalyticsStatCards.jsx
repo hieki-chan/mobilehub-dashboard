@@ -22,27 +22,27 @@ const AnalyticsStatCards = () => {
       {Analytics_Card_Data.map((item, index) => (
         <motion.div
           key={item.name}
-          className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+          className="bg-white shadow-lg rounded-xl p-6 border border-black"
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.2 }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-medium text-gray-300">
+              <h3 className="text-base font-medium text-gray-700">
                 {item.name}
               </h3>
-              <p className="mt-2 text-xl font-semibold text-gray-100">
+              <p className="mt-2 text-xl font-semibold text-gray-900">
                 {item.value}
               </p>
             </div>
 
             <div
               className={`
-                            p-3 rounded-full bg-opacity-20 ${
-                              item.change >= 0 ? "bg-green-500" : "bg-red-500"
-                            }
-                        `}
+                              p-3 rounded-full bg-opacity-20 ${
+                                item.change >= 0 ? "bg-green-200" : "bg-red-200"
+                              }
+                          `}
             >
               <item.icon
                 className={`size-6 ${
@@ -54,10 +54,10 @@ const AnalyticsStatCards = () => {
 
           <div
             className={`
-                        mt-4 flex items-center ${
-                          item.change >= 0 ? "text-green-500" : "text-red-500"
-                        }
-                    `}
+                          mt-4 flex items-center ${
+                            item.change >= 0 ? "text-green-500" : "text-red-500"
+                          }
+                      `}
           >
             {item.change >= 0 ? (
               <ArrowUpRight size={20} />
@@ -67,7 +67,7 @@ const AnalyticsStatCards = () => {
             <span className="ml-1 text-sm font-medium">
               {Math.abs(item.change)}%
             </span>
-            <span className="ml-2 text-sm font-medium text-gray-400">
+            <span className="ml-2 text-sm font-medium text-gray-600">
               so với kỳ trước
             </span>
           </div>

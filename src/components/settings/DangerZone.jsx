@@ -48,12 +48,10 @@ const DangerZone = () => {
       >
         <div className="flex items-center mb-4">
           <Trash2 className="text-red-400 mr-3" size={24} />
-          <h2 className="text-xl font-semibold text-gray-100">
-            Khu vực nguy hiểm
-          </h2>
+          <h2 className="text-xl font-bold text-white">Khu vực nguy hiểm</h2>
         </div>
 
-        <p className="text-gray-300 mb-4">
+        <p className="text-gray-200 mb-4">
           Việc xóa tài khoản sẽ **vĩnh viễn** xóa toàn bộ dữ liệu và nội dung
           liên quan. Hãy xác nhận nếu bạn thực sự muốn tiếp tục — hành động này
           không thể hoàn tác.
@@ -74,10 +72,10 @@ const DangerZone = () => {
             exit={{ scale: 0, duration: 0.5 }}
           >
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
-              <h3 className="text-lg font-semibold text-red-200 mb-4">
+              <h3 className="text-lg font-semibold text-red-400 mb-4">
                 Bạn có chắc chắn muốn xóa tài khoản không?
               </h3>
-              <p className="text-red-300 mb-6">
+              <p className="text-red-400 mb-6">
                 Hành động này **không thể hoàn tác** và sẽ xóa vĩnh viễn toàn bộ
                 dữ liệu của bạn.
               </p>

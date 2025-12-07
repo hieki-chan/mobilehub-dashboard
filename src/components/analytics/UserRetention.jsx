@@ -24,12 +24,12 @@ const duLieuGiuChanNguoiDung = [
 const GiuChanNguoiDung = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-6 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.5 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-xl font-semibold text-black mb-4">
         Tỷ lệ giữ chân người dùng
       </h2>
 
@@ -37,8 +37,8 @@ const GiuChanNguoiDung = () => {
         <ResponsiveContainer>
           <LineChart data={duLieuGiuChanNguoiDung}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9CA3AF" />
-            <YAxis stroke="#9CA3AF" />
+            <XAxis dataKey="name" stroke="#000" tick={{ fill: "#000" }} />
+            <YAxis stroke="#000" tick={{ fill: "#000" }} />
             <Tooltip
               contentStyle={{
                 backgroundColor: "rgba(31, 41, 55, 0.8)",

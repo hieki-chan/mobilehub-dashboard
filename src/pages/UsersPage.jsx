@@ -16,7 +16,7 @@ const Users_Stat = {
 
 const UsersPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
+    <div className="flex-1 overflow-auto relative z-10 bg-white text-gray-900">
       <Header
         path={[
           { label: "Mobilehub", to: "/" },
@@ -29,7 +29,7 @@ const UsersPage = () => {
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-7"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: .75 }}
+          transition={{ duration: 0.75 }}
         >
           <StatCards
             name="Tổng số người dùng"
@@ -59,8 +59,6 @@ const UsersPage = () => {
 
         {/* BẢNG DỮ LIỆU NGƯỜI DÙNG */}
         <UserListSection />
-
-
       </main>
     </div>
   );

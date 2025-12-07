@@ -18,15 +18,15 @@ const Orders_Stat = {
 
 const OrdersPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
-       <Header
+    <div className="flex-1 overflow-auto relative z-10 bg-white text-gray-900">
+      <Header
         path={[
           { label: "Mobilehub", to: "/" },
           { label: "Đơn hàng", to: "/orders" },
         ]}
       />
 
-      <main className="py-6 px-4 lg:px-4">
+      <main className="py-6 px-4 lg:px-6">
         <motion.div
           className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-7"
           initial={{ opacity: 0, y: 30 }}
@@ -60,8 +60,6 @@ const OrdersPage = () => {
             color="#ef4444"
           />
         </motion.div>
-
-        
 
         {/* Biểu đồ đơn hàng theo ngày và trạng thái đơn hàng */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7">

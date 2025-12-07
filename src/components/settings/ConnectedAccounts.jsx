@@ -40,7 +40,7 @@ const ConnectedAccounts = () => {
               alt="Social Icon"
               className="size-7 rounded-full object-cover mr-2"
             />
-            <span className="text-gray-300">{Account.name}</span>
+            <span className="text-black font-semibold">{Account.name}</span>
           </div>
 
           <button

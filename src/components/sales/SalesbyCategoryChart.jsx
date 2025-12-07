@@ -22,12 +22,12 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#0088fe"];
 const SalesbyCategoryChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-5 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.3, delay: 0.7 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      <h2 className="text-xl font-semibold mb-4 text-gray-900">
         Doanh thu theo danh mục
       </h2>
 
@@ -59,14 +59,14 @@ const SalesbyCategoryChart = () => {
                 "Doanh thu",
               ]}
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#ffffff",
+                borderColor: "#d1d5db",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#111827" }}
             />
             <Legend
               formatter={() => "Doanh thu"}
-              wrapperStyle={{ color: "#e5e7eb" }}
+              wrapperStyle={{ color: "#111827" }}
             />
           </PieChart>
         </ResponsiveContainer>

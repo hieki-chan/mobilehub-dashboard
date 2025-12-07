@@ -23,12 +23,12 @@ const DuLieuPhanKhucKhachHang = [
 const PhanKhucKhachHang = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-6 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.5 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-xl font-semibold text-black mb-4">
         Phân khúc khách hàng
       </h2>
 

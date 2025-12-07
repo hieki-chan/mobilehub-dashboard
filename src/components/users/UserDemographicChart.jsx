@@ -24,12 +24,12 @@ const DuLieuNhanKhauHoc = [
 const UserDemographicChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 lg:col-span-2 border border-gray-700"
+      className="bg-white shadow-lg rounded-xl p-5 lg:col-span-2 border-2 border-black"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.8, delay: 1.2 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      <h2 className="text-xl font-semibold mb-4 text-black">
         Nhân khẩu học người dùng
       </h2>
 
@@ -58,17 +58,15 @@ const UserDemographicChart = () => {
 
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(31, 45, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#ffffff",
+                borderColor: "#d1d5db",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#000" }}
               formatter={(value, name) => [`${value}%`, `${name}`]}
               labelFormatter={(label) => `Nhóm tuổi: ${label}`}
             />
             <Legend
-              formatter={(value) => (
-                <span className="text-gray-300">{value}</span>
-              )}
+              formatter={(value) => <span className="text-black">{value}</span>}
             />
           </PieChart>
         </ResponsiveContainer>

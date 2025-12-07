@@ -4,8 +4,9 @@ import ProductDiscountTab from "./ProductDiscountTab";
 import ProductInventoryTab from "./ProductInventoryTab";
 import ProductVariantTab from "./ProductVariantTab";
 
-const ProductTabs = ({ newProduct, setNewProduct }) => {
+const ProductTabs = ({ newProduct, setNewProduct, mode }) => {
   const [activeTab, setActiveTab] = useState("info");
+  const isView = mode === "view";
 
   return (
     <div className="flex flex-col gap-6">
@@ -20,10 +21,11 @@ const ProductTabs = ({ newProduct, setNewProduct }) => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 text-sm font-medium rounded-t-md transition-all ${activeTab === tab.id
+            className={`px-4 py-2 text-sm font-medium rounded-t-md transition-all ${
+              activeTab === tab.id
                 ? "bg-gray-900 text-white hover:bg-gray-800 shadow-sm"
                 : "text-gray-700 hover:bg-gray-100"
-              }`}
+            }`}
           >
             {tab.label}
           </button>
@@ -31,16 +33,38 @@ const ProductTabs = ({ newProduct, setNewProduct }) => {
       </div>
 
       {/* ===== TAB CONTENT ===== */}
-      <div className="p-4 bg-white border border-gray-200 rounded-md">
+      <div
+        className={`p-4 bg-white border border-gray-200 rounded-md ${
+          isView ? "pointer-events-none opacity-90" : ""
+        }`}
+      >
         {activeTab === "info" && (
-          <ProductInfoTab newProduct={newProduct} setNewProduct={setNewProduct} />
+          <ProductInfoTab
+            newProduct={newProduct}
+            setNewProduct={setNewProduct}
+            mode={mode}
+          />
         )}
-        {activeTab === "variants" && <ProductVariantTab newProduct={newProduct} setNewProduct={setNewProduct} />}
+        {activeTab === "variants" && (
+          <ProductVariantTab
+            newProduct={newProduct}
+            setNewProduct={setNewProduct}
+            mode={mode}
+          />
+        )}
         {activeTab === "discount" && (
-          <ProductDiscountTab newProduct={newProduct} setNewProduct={setNewProduct} />
+          <ProductDiscountTab
+            newProduct={newProduct}
+            setNewProduct={setNewProduct}
+            mode={mode}
+          />
         )}
         {activeTab === "inventory" && (
-          <ProductInventoryTab newProduct={newProduct} setNewProduct={setNewProduct} />
+          <ProductInventoryTab
+            newProduct={newProduct}
+            setNewProduct={setNewProduct}
+            mode={mode}
+          />
         )}
       </div>
     </div>
