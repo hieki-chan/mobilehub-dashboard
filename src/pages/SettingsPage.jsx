@@ -9,18 +9,15 @@ import DangerZone from "../components/settings/DangerZone";
 
 const SettingsPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-50">
+    // THAY ĐỔI: bg-gray-50, text-gray-900
+    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
       <Header title="Cài đặt" />
 
-      <main className="py-6 px-4 lg:px-4">
+      <main className="max-w-4xl mx-auto py-8 px-4 lg:px-8">
         <Profile />
-
         <Notification />
-
         <Security />
-
         <ConnectedAccounts />
-
         <DangerZone />
       </main>
     </div>

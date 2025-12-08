@@ -4,19 +4,20 @@ import { motion } from "framer-motion";
 const SettingSection = ({ icon: Icon, title, children }) => {
   return (
     <motion.div
-      className="bg-gray-100 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl border border-gray-700 p-6 mb-4"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl border border-gray-200 p-6 mb-4"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
       <div className="flex items-center mb-4">
-        <Icon className="text-indigo-500 mr-2" size="22" />
+        <Icon className="text-indigo-600 mr-2" size={22} />
+        {/* THAY ĐỔI: text-gray-800 */}
         <h2 className="text-xl tracking-wide font-semibold text-gray-800">
           {title}
         </h2>
       </div>
 
-      {/* Nội dung con (children) */}
       {children}
     </motion.div>
   );

@@ -7,59 +7,39 @@ import Twitter from "/src/assests/x.webp";
 
 const ConnectedAccounts = () => {
   const [connectedAccounts, setConnectedAccounts] = useState([
-    {
-      id: 1,
-      name: "Google",
-      connected: true,
-      icon: Google,
-    },
-    {
-      id: 2,
-      name: "Facebook",
-      connected: false,
-      icon: Facebook,
-    },
-    {
-      id: 3,
-      name: "Twitter",
-      connected: true,
-      icon: Twitter,
-    },
+    { id: 1, name: "Google", connected: true, icon: Google },
+    { id: 2, name: "Facebook", connected: false, icon: Facebook },
+    { id: 3, name: "Twitter", connected: true, icon: Twitter },
   ]);
 
   return (
     <SettingSection icon={HelpCircle} title={"Tài khoản đã liên kết"}>
       {connectedAccounts.map((Account) => (
-        <div
-          key={Account.id}
-          className="flex items-center justify-between py-3"
-        >
-          <div className="flex gap-1 items-center">
+        <div key={Account.id} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+          <div className="flex gap-3 items-center">
             <img
               src={Account.icon}
               alt="Social Icon"
-              className="size-7 rounded-full object-cover mr-2"
+              className="size-8 rounded-full object-cover p-0.5 bg-gray-50 border border-gray-200"
             />
-            <span className="text-gray-300">{Account.name}</span>
+            {/* THAY ĐỔI: text-gray-700 */}
+            <span className="text-gray-700 font-medium">{Account.name}</span>
           </div>
 
           <button
             className={`
-                            px-3 py-1 rounded text-white transition duration-300
-                            ${
-                              Account.connected
-                                ? "bg-green-600 hover:bg-green-700"
-                                : "bg-gray-600 hover:bg-gray-700"
-                            }
-                        `}
+                px-4 py-1.5 rounded-md text-sm font-medium transition duration-200
+                ${
+                  Account.connected
+                    ? "bg-green-100 text-green-700 hover:bg-green-200"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }
+            `}
             onClick={() => {
               setConnectedAccounts(
                 connectedAccounts.map((acc) => {
                   if (acc.id === Account.id) {
-                    return {
-                      ...acc,
-                      connected: !acc.connected,
-                    };
+                    return { ...acc, connected: !acc.connected };
                   }
                   return acc;
                 })
@@ -71,7 +51,7 @@ const ConnectedAccounts = () => {
         </div>
       ))}
 
-      <button className="mt-4 flex items-center text-indigo-400 hover:text-indigo-300 transition duration-200">
+      <button className="mt-5 flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition duration-200">
         <Plus size={18} className="mr-2" /> Thêm tài khoản
       </button>
     </SettingSection>

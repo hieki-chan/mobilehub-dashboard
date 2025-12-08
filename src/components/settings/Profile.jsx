@@ -2,25 +2,22 @@ import React, { useState } from "react";
 import SettingSection from "./SettingSection";
 import { User, X } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "/src/assests/Mudassar Nazir.png";
+import Image from "/src/assests/admin.jpg";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [name, setName] = useState("Mudassar Nazir");
-  const [email, setEmail] = useState("mudassarnazir137@gmail.com");
+  const [name, setName] = useState("Admin");
+  const [email, setEmail] = useState("admin@mobilehub.com");
   const [tempName, setTempName] = useState(name);
   const [tempEmail, setTempEmail] = useState(email);
 
-  // Mở modal
   const openModal = () => {
     setTempName(name);
     setTempEmail(email);
     setIsModalOpen(true);
   };
-  // Đóng modal
   const closeModal = () => setIsModalOpen(false);
 
-  // Lưu thay đổi
   const handleSave = () => {
     setName(tempName);
     setEmail(tempEmail);
@@ -33,60 +30,81 @@ const Profile = () => {
         <img
           src={Image}
           alt="Ảnh đại diện"
-          className="rounded-full size-28 object-cover mr-4 mb-4 sm:mb-0"
+          className="rounded-full size-28 object-cover mr-4 mb-4 sm:mb-0 border-2 border-indigo-100"
         />
         <div>
-          <h3 className="text-xl font-semibold text-black mb-1">{name}</h3>
-          <p className="text-gray-900">{email}</p>
+          <h3 className="text-xl font-semibold text-gray-900 mb-1">{name}</h3>
+          <p className="text-gray-600">{email}</p>
         </div>
       </div>
 
       <button
         onClick={openModal}
-        className="bg-indigo-600 hover:bg-indigo-800 text-black font-semibold py-2 px-6 rounded transition duration-300 w-full sm:w-auto"
+        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded transition duration-300 w-full sm:w-auto shadow-sm"
       >
         Chỉnh sửa hồ sơ
       </button>
 
-      {/* Hộp thoại chỉnh sửa hồ sơ */}
+      {/* Modal */}
       {isModalOpen && (
         <motion.div
-          className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: 0, duration: 0.5 }}
+          className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          <div className="bg-gray-800 p-6 rounded shadow-lg w-11/12 sm:w-2/4 relative">
+          <motion.div 
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            className="bg-white p-6 rounded-xl shadow-xl w-11/12 sm:w-2/4 relative border border-gray-100"
+          >
             <button
               onClick={closeModal}
-              className="text-gray-300 hover:text-gray-100 absolute top-4 right-4"
+              className="text-gray-400 hover:text-gray-700 absolute top-4 right-4 transition-colors"
             >
-              <X />
+              <X size={20} />
             </button>
-            <h2 className="text-xl font-semibold text-gray-100 mb-4">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">
               Chỉnh sửa hồ sơ
             </h2>
-            <input
-              type="text"
-              value={tempName}
-              onChange={(e) => setTempName(e.target.value)}
-              className="w-full mb-3 p-2 rounded bg-gray-700 text-white outline-none"
-              placeholder="Nhập tên"
-            />
-            <input
-              type="email"
-              value={tempEmail}
-              onChange={(e) => setTempEmail(e.target.value)}
-              className="w-full mb-3 p-2 rounded bg-gray-700 text-white outline-none"
-              placeholder="Nhập email"
-            />
-            <button
-              onClick={handleSave}
-              className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300 w-full"
-            >
-              Lưu thay đổi
-            </button>
-          </div>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Họ tên</label>
+              <input
+                type="text"
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Nhập tên"
+              />
+            </div>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                type="email"
+                value={tempEmail}
+                onChange={(e) => setTempEmail(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                placeholder="Nhập email"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3">
+               <button
+                onClick={closeModal}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+              >
+                Hủy
+              </button>
+              <button
+                onClick={handleSave}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg shadow-sm transition"
+              >
+                Lưu thay đổi
+              </button>
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </SettingSection>
