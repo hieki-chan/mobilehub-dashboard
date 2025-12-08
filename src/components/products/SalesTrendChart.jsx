@@ -17,30 +17,32 @@ const SalesTrend_Data = [
 const SalesTrendChart = () => {
     return (
         <motion.div
-            className='bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700'
+            // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+            className='bg-white shadow-sm rounded-xl p-5 border border-gray-200'
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, delay: 0.3 }}
         >
-            <h2 className='text-lg font-medium mb-4 text-gray-100'>
+            {/* THAY ĐỔI: text-gray-800 */}
+            <h2 className='text-lg font-medium mb-4 text-gray-800'>
                 Sales Trend
             </h2>
 
             <div style={{ width: "100%", height: 300 }}>
-                {/* NO SUCH DIFFERENCE  */}
-
-            {/* <div className='h-80'> */}
                 <ResponsiveContainer width={'100%'} height={"100%"}>
                     <LineChart data={SalesTrend_Data}>
-                        <CartesianGrid strokeDasharray={'3 3'} stroke='#374151' />
-                        <XAxis dataKey={"month"} stroke='#9ca3af' />
-                        <YAxis stroke='#9ca3af' />
+                        {/* THAY ĐỔI: stroke lưới nhạt */}
+                        <CartesianGrid strokeDasharray={'3 3'} stroke='#e5e7eb' />
+                        {/* THAY ĐỔI: stroke trục đậm hơn */}
+                        <XAxis dataKey={"month"} stroke='#6b7280' />
+                        <YAxis stroke='#6b7280' />
                         <Tooltip
+                            // THAY ĐỔI: Tooltip nền trắng, chữ đậm
                             contentStyle={{
-                                backgroundColor: "rgba(31, 45, 55, 0.8)",
-                                borderColor: "4b5563"
+                                backgroundColor: "#fff",
+                                borderColor: "#e5e7eb"
                             }}
-                            itemStyle={{ color: "#e5e7eb" }}
+                            itemStyle={{ color: "#374151" }}
                         />
                         <Line
                             type="monotone"
@@ -48,7 +50,8 @@ const SalesTrendChart = () => {
                             stroke='#8b5cf6'
                             strokeWidth={2}
                         />
-                        <Legend/>
+                        {/* THAY ĐỔI: Legend chữ đậm */}
+                        <Legend wrapperStyle={{ color: "#374151" }}/>
                     </LineChart>
                 </ResponsiveContainer>
             </div>

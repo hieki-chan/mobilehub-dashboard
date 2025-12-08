@@ -21,12 +21,14 @@ const COLORS = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#fed766", "#2ab7ca"];
 const StatusDistributionChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-5 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
         Phân bố trạng thái đơn hàng
       </h2>
 
@@ -53,17 +55,19 @@ const StatusDistributionChart = () => {
               ))}
             </Pie>
             <Tooltip
+              // THAY ĐỔI: Tooltip nền trắng, chữ đậm
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#374151" }}
               formatter={(value, name) => [`${value} đơn hàng`, name]}
               labelFormatter={() => "Chi tiết"}
             />
             <Legend
+              // THAY ĐỔI: Màu chữ legend đậm
               formatter={(value) => (
-                <span style={{ color: "#e5e7eb" }}>{value}</span>
+                <span style={{ color: "#374151" }}>{value}</span>
               )}
             />
           </PieChart>

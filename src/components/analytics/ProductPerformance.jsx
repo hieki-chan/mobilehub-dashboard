@@ -21,33 +21,41 @@ const Product_Performance_Data = [
 const ProductPerformance = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700 mt-7"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-6 border border-gray-200 mt-7"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.4 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Hiệu suất sản phẩm
       </h2>
 
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
           <BarChart data={Product_Performance_Data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9CA3AF" />
-            <YAxis stroke="#9CA3AF" />
+            {/* THAY ĐỔI: stroke lưới */}
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="name" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
             <Tooltip
               formatter={(value, name) => [
                 `${value} đơn vị`,
                 name.replaceAll("_", " "),
               ]}
+              // THAY ĐỔI: Tooltip nền trắng
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4B5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#E5E7EB" }}
+              itemStyle={{ color: "#374151" }}
             />
-            <Legend formatter={(value) => value.replaceAll("_", " ")} />
+            <Legend
+              formatter={(value) => value.replaceAll("_", " ")}
+              // THAY ĐỔI: Màu chữ legend
+              wrapperStyle={{ color: "#374151" }}
+            />
             <Bar dataKey="Doanh_số" fill="#8B5CF6" />
             <Bar dataKey="Doanh_thu" fill="#10B981" />
             <Bar dataKey="Lợi_nhuận" fill="#F59E0B" />

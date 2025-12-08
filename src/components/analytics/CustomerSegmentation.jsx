@@ -23,12 +23,14 @@ const DuLieuPhanKhucKhachHang = [
 const PhanKhucKhachHang = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-6 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.5 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Phân khúc khách hàng
       </h2>
 
@@ -39,9 +41,10 @@ const PhanKhucKhachHang = () => {
           cy="50%"
           outerRadius="80%"
         >
-          <PolarGrid stroke="#374151" />
-          <PolarAngleAxis dataKey="subject" stroke="#7ca3af" />
-          <PolarRadiusAxis angle={30} domain={[0, 150]} stroke="#9ca3af" />
+          {/* THAY ĐỔI: stroke lưới */}
+          <PolarGrid stroke="#e5e7eb" />
+          <PolarAngleAxis dataKey="subject" stroke="#6b7280" />
+          <PolarRadiusAxis angle={30} domain={[0, 150]} stroke="#6b7280" />
           <Radar
             name="Nhóm A"
             dataKey="NhomA"
@@ -58,17 +61,20 @@ const PhanKhucKhachHang = () => {
           />
           <Legend
             formatter={(value) => (value === "NhomA" ? "Nhóm A" : "Nhóm B")}
+            // THAY ĐỔI: Màu chữ legend
+            wrapperStyle={{ color: "#374151" }}
           />
           <Tooltip
             formatter={(value, name) => [
               value,
               name === "NhomA" ? "Nhóm A" : "Nhóm B",
             ]}
+            // THAY ĐỔI: Tooltip nền trắng
             contentStyle={{
-              backgroundColor: "rgba(31, 41, 55, 0.8)",
-              borderColor: "#4B5563",
+              backgroundColor: "#fff",
+              borderColor: "#e5e7eb",
             }}
-            itemStyle={{ color: "#E5E7EB" }}
+            itemStyle={{ color: "#374151" }}
           />
         </RadarChart>
       </ResponsiveContainer>

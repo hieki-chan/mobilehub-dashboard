@@ -18,7 +18,8 @@ const Sales_Stats = {
 
 const SalesPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-900">
+    // THAY ĐỔI: bg-gray-900 -> bg-gray-50, thêm text-gray-900
+    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
       <Header title="Sales Dashboard" />
 
       {/* STAT DATA */}
@@ -56,11 +57,9 @@ const SalesPage = () => {
         </motion.div>
 
         {/* OVERVIEW CHART OF SALES */}
-
         <OverviewSalesChart />
 
-        {/* Catagory Sales Chart */}
-
+        {/* Category Sales Chart */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7 mt-7">
           <SalesbyCategoryChart />
           <DailySalesTrend />

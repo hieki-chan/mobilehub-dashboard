@@ -29,12 +29,14 @@ const COLORS = [
 const ChannelPerformance = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700 mt-7"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-6 border border-gray-200 mt-7"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.4 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Hiệu suất kênh truy cập
       </h2>
 
@@ -60,14 +62,18 @@ const ChannelPerformance = () => {
               ))}
             </Pie>
             <Tooltip
+              // THAY ĐỔI: Tooltip nền trắng
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4B5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#E5E7EB" }}
+              itemStyle={{ color: "#374151" }}
               formatter={(value, name) => [`${value} lượt truy cập`, "Kênh"]}
             />
-            <Legend />
+            <Legend
+              // THAY ĐỔI: Màu chữ legend
+              wrapperStyle={{ color: "#374151" }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>

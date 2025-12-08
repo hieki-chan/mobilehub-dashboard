@@ -21,23 +21,26 @@ const DuLieuDoanhThu = [
   { month: "Tháng 7", DoanhThu: 7000, MucTieu: 6500 },
 ];
 
-const BieuDoDoanhThu = () => {
+const RevenueChart = () => {
   const [KhoangThoiGian, setKhoangThoiGian] = useState("Quý này");
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 text-center lg:col-span-2 border border-gray-700"
+      // THAY ĐỔI: bg-white, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-5 text-center lg:col-span-2 border border-gray-200 mb-2"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: 0.2 }}
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-100">
+        {/* THAY ĐỔI: text-gray-800 */}
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">
           Doanh thu so với Mục tiêu
         </h2>
 
         <select
-          className="bg-gray-700 text-white rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          // THAY ĐỔI: bg-white, text-gray-700, border-gray-300
+          className="bg-white border border-gray-300 text-gray-700 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
           value={KhoangThoiGian}
           onChange={(e) => setKhoangThoiGian(e.target.value)}
         >
@@ -51,15 +54,17 @@ const BieuDoDoanhThu = () => {
       <div className="w-full h-80">
         <ResponsiveContainer>
           <AreaChart data={DuLieuDoanhThu}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="month" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            {/* THAY ĐỔI: stroke lưới */}
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="month" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
             <Tooltip
+              // THAY ĐỔI: Tooltip sáng
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#374151" }}
               formatter={(value, name) =>
                 name === "DoanhThu"
                   ? [`${value} USD`, "Doanh thu"]
@@ -67,6 +72,8 @@ const BieuDoDoanhThu = () => {
               }
             />
             <Legend
+              // THAY ĐỔI: Màu chữ legend
+              wrapperStyle={{ color: "#374151" }}
               formatter={(value) =>
                 value === "DoanhThu" ? "Doanh thu" : "Mục tiêu"
               }
@@ -92,4 +99,4 @@ const BieuDoDoanhThu = () => {
   );
 };
 
-export default BieuDoDoanhThu;
+export default RevenueChart;

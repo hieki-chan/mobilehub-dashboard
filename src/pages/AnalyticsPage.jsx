@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import Header from "../components/common_components/Header";
 import AnalyticsStatCards from "../components/analytics/AnalyticsStatCards";
 import RevenueChart from "../components/analytics/RevenueChart";
@@ -20,8 +19,8 @@ import StatusDistributionChart from "../components/orders/StatusDistributionChar
 
 const AnalyticsPage = () => {
   return (
-    <div className="flex-1 overflow-auto relative z-10 bg-gray-900">
-      {/* Tiêu đề trang */}
+    // THAY ĐỔI: bg-gray-900 -> bg-gray-50, text-gray-900
+    <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
       <Header title="Bảng điều khiển phân tích" />
 
       <main className='mx-auto py-6 px-4 lg:px-8'>
@@ -32,27 +31,27 @@ const AnalyticsPage = () => {
 
         {/* Hiệu suất kênh, sản phẩm, giữ chân người dùng, phân khúc khách hàng */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-7">
-          <ChannelPerformance /> {/* Hiệu suất kênh */}
-          <ProductPerformance /> {/* Hiệu suất sản phẩm */}
-          <UserRetention /> {/* Giữ chân người dùng */}
-          <CustomerSegmentation /> {/* Phân khúc khách hàng */}
+          <ChannelPerformance />
+          <ProductPerformance />
+          <UserRetention />
+          <CustomerSegmentation />
         </div>
 
         {/* BIỂU ĐỒ NGƯỜI DÙNG */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           <UserGrowthChart />
           <UserActivityHeatMap />
           <UserDemographicChart />
         </div>
 
         {/* ===== Biểu đồ ===== */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5  pt-5">
           <SalesTrendChart />
           <CategoryDistributionChart />
         </div>
 
         {/* Biểu đồ đơn hàng theo ngày và trạng thái đơn hàng */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-7 pt-5">
           <DailyOrdersChart />
           <StatusDistributionChart />
         </div>

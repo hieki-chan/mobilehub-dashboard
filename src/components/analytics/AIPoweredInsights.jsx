@@ -32,22 +32,24 @@ const INSIGHTS = [
 const AIPoweredInsights = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg shadow-lg rounded-xl p-6 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-6 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1, duration: 0.5 }}
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-4">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Thông Tin Phân Tích Từ AI
       </h2>
 
       <div className="space-y-4">
         {INSIGHTS.map((item, index) => (
           <div key={index} className="flex items-center space-x-3">
-            <div className={`p-2 rounded-full bg-opacity-20 ${item.color}`}>
+            <div className={`p-2 rounded-full bg-opacity-10 ${item.color.replace('text-', 'bg-')}`}>
               <item.icon className={`size-[22px] ${item.color}`} />
             </div>
-            <p className="text-gray-300">{item.insight}</p>
+            {/* THAY ĐỔI: text-gray-600 */}
+            <p className="text-gray-600">{item.insight}</p>
           </div>
         ))}
       </div>

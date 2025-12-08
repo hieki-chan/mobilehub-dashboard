@@ -26,18 +26,21 @@ const OverviewSalesChart = () => {
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 text-center lg:col-span-2 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200 (Theme sáng)
+      className="bg-white shadow-sm rounded-xl p-5 text-center lg:col-span-2 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: 0.2 }}
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-100">
+        {/* THAY ĐỔI: text-gray-100 -> text-gray-800 */}
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">
           Tổng quan doanh thu
         </h2>
 
         <select
-          className="bg-gray-700 text-white rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          // THAY ĐỔI: bg-white, text-gray-700, border-gray-300
+          className="bg-white border border-gray-300 text-gray-700 rounded-md px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-600"
           value={SelectedTimeRange}
           onChange={(e) => setSelectedTimeRange(e.target.value)}
         >
@@ -51,19 +54,21 @@ const OverviewSalesChart = () => {
       <div className="w-full h-80">
         <ResponsiveContainer>
           <AreaChart data={Monthly_Sales_Data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-            <XAxis dataKey="month" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            {/* THAY ĐỔI: stroke lưới nhạt hơn cho nền trắng */}
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="month" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
             <Tooltip
               formatter={(value) => [
                 `${value.toLocaleString()} ₫`,
                 "Doanh thu",
               ]}
+              // THAY ĐỔI: Tooltip nền trắng, chữ đen
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#374151" }}
             />
             <Area
               type="monotone"
@@ -74,7 +79,8 @@ const OverviewSalesChart = () => {
             />
             <Legend
               formatter={() => "Doanh thu"}
-              wrapperStyle={{ color: "#e5e7eb" }}
+              // THAY ĐỔI: Legend màu chữ tối
+              wrapperStyle={{ color: "#374151" }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -80,33 +80,39 @@ const User_Activity_Data = [
 const UserActivityHeatMap = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-5 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.3, delay: 0.7 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
         Biểu đồ hoạt động người dùng theo thời gian
       </h2>
 
       <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer>
           <BarChart data={User_Activity_Data}>
-            <CartesianGrid strokeDasharray="3, 3" stroke="#374151" />
-            <XAxis dataKey="name" stroke="#9ca3af" />
-            <YAxis stroke="#9ca3af" />
+            {/* THAY ĐỔI: stroke lưới nhạt */}
+            <CartesianGrid strokeDasharray="3, 3" stroke="#e5e7eb" />
+            {/* THAY ĐỔI: stroke trục đậm */}
+            <XAxis dataKey="name" stroke="#6b7280" />
+            <YAxis stroke="#6b7280" />
 
             <Tooltip
+              // THAY ĐỔI: Tooltip nền trắng, chữ đậm
               contentStyle={{
-                backgroundColor: "rgba(31, 45, 55, 0.85)",
-                borderColor: "#4b5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
                 borderRadius: 8,
               }}
-              itemStyle={{ color: "#e5e7eb" }}
-              labelStyle={{ color: "#93c5fd" }}
+              itemStyle={{ color: "#374151" }}
+              labelStyle={{ color: "#374151" }}
             />
 
-            <Legend wrapperStyle={{ color: "#e5e7eb" }} />
+            {/* THAY ĐỔI: Màu chữ legend đậm */}
+            <Legend wrapperStyle={{ color: "#374151" }} />
 
             <Bar dataKey="0-4h" stackId="a" fill="#5B82F7" />
             <Bar dataKey="4-8h" stackId="a" fill="#8B5CF6" />

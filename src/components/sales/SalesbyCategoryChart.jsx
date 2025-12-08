@@ -22,12 +22,14 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#0088fe"];
 const SalesbyCategoryChart = () => {
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 shadow-lg backdrop-blur-md rounded-xl p-5 border border-gray-700"
+      // THAY ĐỔI: bg-white, shadow-sm, border-gray-200
+      className="bg-white shadow-sm rounded-xl p-5 border border-gray-200"
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1.3, delay: 0.7 }}
     >
-      <h2 className="text-xl font-semibold mb-4 text-gray-100">
+      {/* THAY ĐỔI: text-gray-800 */}
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">
         Doanh thu theo danh mục
       </h2>
 
@@ -58,15 +60,17 @@ const SalesbyCategoryChart = () => {
                 `${value.toLocaleString()} ₫`,
                 "Doanh thu",
               ]}
+              // THAY ĐỔI: Tooltip style
               contentStyle={{
-                backgroundColor: "rgba(31, 41, 55, 0.8)",
-                borderColor: "#4b5563",
+                backgroundColor: "#fff",
+                borderColor: "#e5e7eb",
               }}
-              itemStyle={{ color: "#e5e7eb" }}
+              itemStyle={{ color: "#374151" }}
             />
             <Legend
               formatter={() => "Doanh thu"}
-              wrapperStyle={{ color: "#e5e7eb" }}
+              // THAY ĐỔI: Legend style
+              wrapperStyle={{ color: "#374151" }}
             />
           </PieChart>
         </ResponsiveContainer>
