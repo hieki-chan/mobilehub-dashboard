@@ -104,3 +104,8 @@ export const getAdminProductDetail = async (productId) => {
   const res = await api.get(`${API_BASE_URL_ADMIN}/${productId}/detail`);
   return res.data;
 };
+
+export const fetchBrandSales = async () => {
+  const res = await api.get("/admin/products/sales/brand");
+  return res.data;
+};

@@ -62,7 +62,7 @@ const ProductListSection = ({ onAddClick, onEditClick, reloadFlag }) => {
                 : "https://via.placeholder.com/100x100?text=No+Image",
 
             category: "Không xác định",
-            stock: 0,
+            stock: item.stock,
           };
         });
 

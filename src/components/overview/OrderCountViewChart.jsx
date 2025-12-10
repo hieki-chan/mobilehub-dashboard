@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { motion } from "framer-motion";
-import { fetchMonthlySales } from "../../api/orderApi";
+import { fetchMonthlyOrderCount } from "../../api/orderApi"; // Import API lấy số lượng đơn hàng
 
 const formatCurrency = (value) => {
   if (value >= 1000000) {
@@ -21,25 +21,25 @@ const formatCurrency = (value) => {
   }
 };
 
-const SaleOverviewChart = () => {
-  const [salesData, setSalesData] = useState([]);
+const OrderCountChart = () => {
+  const [orderCountData, setOrderCountData] = useState([]); // State để lưu trữ số lượng đơn hàng
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    fetchMonthlySales()
+    fetchMonthlyOrderCount()
       .then((data) => {
         const formattedData = Array.from({ length: 12 }, (_, i) => {
           const monthData = data.find(
             (item) => item.month - 1 === i && item.year === currentYear
           );
           return {
-            month: `${i + 1}`,
-            totalSales: monthData ? monthData.totalAmount : 0,
+            month: `${i + 1}`, // Đảm bảo tháng dưới dạng chuỗi
+            orderCount: monthData ? monthData.orderCount : 0, // Nếu không có dữ liệu, gán số lượng đơn hàng là 0
           };
         });
-        setSalesData(formattedData);
+        setOrderCountData(formattedData); // Cập nhật dữ liệu vào state
       })
-      .catch((error) => console.error("Lỗi khi lấy dữ liệu doanh thu:", error));
+      .catch((error) => console.error("Lỗi khi lấy dữ liệu số lượng đơn hàng:", error));
   }, [currentYear]);
 
   return (
@@ -49,11 +49,11 @@ const SaleOverviewChart = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-gray-800">Tổng quan doanh thu</h2>
+      <h2 className="text-lg font-medium mb-4 text-gray-800">Tổng quan số lượng đơn hàng</h2>
 
       <div className="h-80">
         <ResponsiveContainer width={"100%"} height={"100%"}>
-          <LineChart data={salesData}>
+          <LineChart data={orderCountData}>
             <CartesianGrid strokeDasharray={"3 3"} stroke="#e5e7eb" />
             <XAxis
               dataKey={"month"}
@@ -64,13 +64,12 @@ const SaleOverviewChart = () => {
             />
             <YAxis
               stroke="#4b5563"
-              tickFormatter={formatCurrency}
+              tickFormatter={(value) => value.toLocaleString()} // Định dạng số lượng đơn hàng
               axisLine={{ stroke: "#d1d5db", strokeWidth: 1 }}
               tickLine={{ stroke: "#d1d5db" }}
-              width={80}  // Tăng độ rộng của trục Y
             />
             <Tooltip
-              formatter={(value) => [`${value.toLocaleString()} ₫`, "Doanh thu"]}
+              formatter={(value) => [`${value.toLocaleString()} đơn`, "Số lượng đơn hàng"]}
               labelFormatter={(label) => `Tháng ${label}`}
               contentStyle={{
                 backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -81,7 +80,7 @@ const SaleOverviewChart = () => {
             />
             <Line
               type="monotone"
-              dataKey="totalSales"
+              dataKey="orderCount"
               stroke="#3b82f6"
               strokeWidth={3}
               dot={{ fill: "#3b82f6", strokeWidth: 2, r: 5 }}
@@ -95,4 +94,4 @@ const SaleOverviewChart = () => {
   );
 };
 
-export default SaleOverviewChart;
+export default OrderCountChart;

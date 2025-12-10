@@ -40,3 +40,8 @@ export const deleteAdminUser = async (userId) => {
   const res = await api.delete(`/admin/users/${userId}`);
   return res.data;
 };
+
+export const fetchNewUsersThisMonth = async () => {
+  const res = await api.get("/admin/users/new-this-month");
+  return res.data;
+};

@@ -5,17 +5,45 @@ import {
   Package,
   TrendingUp,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductFormModal from "../components/products/form/ProductFormModal";
 
 import Header from "../components/common_components/Header";
 import StatCards from "../components/common_components/StatCards";
 import ProductListSection from "../components/products/ProductListSection";
 
+import { fetchAdminProducts } from "../api/ProductApi";
+
 const ProductsPage = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState(null);
   const [reloadFlag, setReloadFlag] = useState(false);
+
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [discountCount, setDiscountCount] = useState(0);
+  const [inactiveCount, setInactiveCount] = useState(0);
+
+  useEffect(() => {
+    fetchAdminProducts(0, 50).then((res) => {
+      const products = res.content;
+
+      setTotalProducts(res.totalElements ?? products.length);
+
+      const lowStock = products.filter((p) => p.stock !== undefined && p.stock <= 3).length;
+      setLowStockCount(lowStock);
+
+      const discountItems = products.filter((p) => {
+        return p.discount?.valueInPercent > 0;
+      }).length;
+      setDiscountCount(discountItems);
+      
+      setInactiveCount(
+      products.filter((p) => p.status === "INACTIVE").length
+    );
+    });
+  }, []);
+
 
   const handleReload = () => {
     setAddModalOpen(false);
@@ -59,27 +87,31 @@ const ProductsPage = () => {
           <StatCards
             name="Tổng sản phẩm"
             icon={Package}
-            value="4,321"
+            value={totalProducts.toLocaleString()}
             color="#6366f1"
           />
+
           <StatCards
-            name="Top Selling"
+            name="Sản phẩm đang khuyến mãi"
             icon={TrendingUp}
-            value="69"
+            value={discountCount.toLocaleString()}
             color="#10b981"
           />
+
           <StatCards
-            name="Low Stock"
+            name="Sản phẩm sắp hết hàng"
             icon={AlertTriangle}
-            value="32"
+            value={lowStockCount.toLocaleString()}
             color="#f59e0b"
           />
+
           <StatCards
-            name="Total Revenue"
-            icon={DollarSign}
-            value="$654,310"
+            name="Sản phẩm đang vô hiệu hóa"
+            icon={AlertTriangle}
+            value={inactiveCount.toLocaleString()}
             color="#ef4444"
           />
+
         </motion.div>
 
         {/* ===== Bảng sản phẩm ===== */}

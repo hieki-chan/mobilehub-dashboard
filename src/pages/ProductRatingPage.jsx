@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, ThumbsUp, MessageSquare, AlertCircle } from "lucide-react";
 
 import Header from "../components/common_components/Header";
 import StatCards from "../components/common_components/StatCards";
 import ProductRatingListSection from "../components/ratings/ProductRatingPageSection";
+
+import { getRatings } from "../api/ratingApi";
 
 const Rating_Stat = {
   totalReviews: "1,245",
@@ -16,6 +18,35 @@ const Rating_Stat = {
 const ProductRatingPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchBy, setSearchBy] = useState("product");
+
+
+  const [totalReviews, setTotalReviews] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [positivePercent, setPositivePercent] = useState(0);
+  const [replyCount, setReplyCount] = useState(0);
+
+  useEffect(() => {
+    getRatings(0, 1000).then(res => {
+      const reviews = res.content;
+
+      const total = res.totalElements ?? reviews.length;
+      setTotalReviews(total);
+
+      if (total > 0) {
+        const avg =
+          reviews.reduce((sum, r) => sum + (r.stars || 0), 0) / total;
+        setAverageRating(avg.toFixed(1));
+      }
+
+      const positive = reviews.filter(r => r.stars >= 4).length;
+      const percent = total > 0 ? (positive / total) * 100 : 0;
+      setPositivePercent(percent.toFixed(1));
+
+      const replied = reviews.filter(r => r.reply != null).length;
+      setReplyCount(replied);
+    });
+  }, []);
+
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
@@ -40,25 +71,28 @@ const ProductRatingPage = () => {
           <StatCards
             name="Tổng số đánh giá"
             icon={MessageSquare}
-            value={Rating_Stat.totalReviews}
+            value={totalReviews.toLocaleString()}
             color="#6366f1"
           />
+
           <StatCards
             name="Điểm trung bình"
             icon={Star}
-            value={Rating_Stat.averageRating}
+            value={averageRating}
             color="#f59e0b"
           />
+
           <StatCards
             name="Tích cực (%)"
             icon={ThumbsUp}
-            value={Rating_Stat.positiveFeedback}
+            value={`${positivePercent}%`}
             color="#10b981"
           />
+
           <StatCards
-            name="Đánh giá bị báo cáo"
+            name="Đánh giá có phản hồi"
             icon={AlertCircle}
-            value={Rating_Stat.reportedReviews}
+            value={replyCount.toLocaleString()}
             color="#ef4444"
           />
         </motion.div>

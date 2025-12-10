@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { AlertTriangle, Plus, Edit3 } from "lucide-react";
+import { adjustStock } from "../../../api/inventoryApi";
 
 const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
   const [quantityToAdd, setQuantityToAdd] = useState("");
   const [showWarning, setShowWarning] = useState(false);
 
-  const currentQty = newProduct?.inventory?.quantity || 0;
+  const currentQty = newProduct?.inventory?.quantity || newProduct?.stock || 0;
   const importPrice = newProduct?.inventory?.import_price || "";
 
-  // === Nhập thêm hàng ===
-  const handleAddStock = () => {
+  const handleAddStock = async () => {
     if (!quantityToAdd || isNaN(quantityToAdd)) return;
-    const updatedQty = currentQty + parseInt(quantityToAdd);
+
+    const updatedQty = newProduct?.inventory?.quantity + parseInt(quantityToAdd);
+
     setNewProduct((prev) => ({
       ...prev,
       inventory: {
@@ -19,10 +21,16 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
         quantity: updatedQty,
       },
     }));
+
+    try {
+      const response = await adjustStock(newProduct?.id, parseInt(quantityToAdd));
+      console.log("Stock adjusted successfully:", response);
+    } catch (error) {
+    }
+
     setQuantityToAdd("");
   };
 
-  // === Sửa số lượng trực tiếp ===
   const handleQuantityChange = (e) => {
     setShowWarning(true);
     const value = e.target.value;
@@ -43,26 +51,7 @@ const ProductInventoryTab = ({ newProduct, setNewProduct }) => {
           📦 Quản lý kho hàng
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">
-              Giá nhập hàng (VNĐ)
-            </label>
-            <input
-              type="number"
-              value={importPrice}
-              onChange={(e) =>
-                setNewProduct((prev) => ({
-                  ...prev,
-                  inventory: {
-                    ...prev.inventory,
-                    import_price: Number(e.target.value),
-                  },
-                }))
-              }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-              placeholder="Nhập giá nhập..."
-            />
-          </div>
+
 
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">

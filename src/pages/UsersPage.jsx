@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { UserCheck, UserIcon, UserPlus, UserX } from "lucide-react";
 
@@ -6,6 +6,7 @@ import Header from "../components/common_components/Header";
 import StatCards from "../components/common_components/StatCards";
 
 import UserListSection from "../components/users/UserListSection";
+import { fetchAdminUsersPaged } from "../api/UserApi";
 
 const Users_Stat = {
   totalUsers: 874504,
@@ -15,6 +16,28 @@ const Users_Stat = {
 };
 
 const UsersPage = () => {
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [activeUsers, setActiveUsers] = useState(0);
+  const [inactiveUsers, setInactiveUsers] = useState(0);
+  const [newUsersToday, setNewUsersToday] = useState(0);
+
+  useEffect(() => {
+    fetchAdminUsersPaged(0, 1000).then(res => {
+      const users = res.content;
+
+      setTotalUsers(res.totalElements ?? users.length);
+
+      setActiveUsers(users.filter(u => u.status === "ACTIVE").length);
+
+      setInactiveUsers(users.filter(u => u.status === "INACTIVE").length);
+
+      const today = new Date().toISOString().split("T")[0];
+      const todayNew = users.filter(u => u.createdAt?.startsWith(today)).length;
+      setNewUsersToday(todayNew);
+    });
+  }, []);
+
+
   return (
     <div className="flex-1 overflow-auto relative z-10 bg-gray-50 text-gray-900">
       <Header
@@ -34,27 +57,30 @@ const UsersPage = () => {
           <StatCards
             name="Tổng số người dùng"
             icon={UserIcon}
-            value={Users_Stat.totalUsers.toLocaleString()}
+            value={totalUsers.toLocaleString()}
             color="#6366f1"
           />
+
           <StatCards
             name="Người dùng mới hôm nay"
             icon={UserPlus}
-            value={Users_Stat.newUsersToday}
+            value={newUsersToday}
+            color="#10b981"
+          />
+
+          <StatCards
+            name="Người dùng mới hôm nay"
+            icon={UserPlus}
+            value={newUsersToday}
             color="#10b981"
           />
           <StatCards
-            name="Người dùng hoạt động"
-            icon={UserCheck}
-            value={Users_Stat.activeUsers.toLocaleString()}
-            color="#f59e0b"
-          />
-          <StatCards
-            name="Tỷ lệ rời bỏ"
+            name="Người dùng bị vô hiệu hóa"
             icon={UserX}
-            value={Users_Stat.churnRate}
+            value={inactiveUsers.toLocaleString()}
             color="#ef4444"
           />
+
         </motion.div>
 
         {/* BẢNG DỮ LIỆU NGƯỜI DÙNG */}

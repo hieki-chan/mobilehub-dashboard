@@ -12,7 +12,6 @@ const normalizePath = (path) =>
 const Header = ({
   path = [
     { label: "Mobilehub", to: "/" },
-    { label: "Người dùng", to: "/users" },
   ],
   notificationsCount = 0,
   userName = "Admin",

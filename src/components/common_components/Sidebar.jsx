@@ -20,9 +20,9 @@ const SIDEBAR_ITEMS = [
   { name: "Sản phẩm", icon: ShoppingBag, color: "#8B5CF6", href: "/products" },
   { name: "Đánh giá", icon: Star, color: "#f6ae5cff", href: "/reviews" },
   { name: "Người dùng", icon: Users, color: "#EC4899", href: "/users" },
-  { name: "Doanh số", icon: DollarSign, color: "#10B981", href: "/sales" },
+  // { name: "Doanh số", icon: DollarSign, color: "#10B981", href: "/sales" },
   { name: "Đơn hàng", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
-  { name: "Phân tích", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
+  // { name: "Phân tích", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
   { name: "Cài đặt", icon: Settings, color: "#6EE7B7", href: "/settings" },
 ];
 
