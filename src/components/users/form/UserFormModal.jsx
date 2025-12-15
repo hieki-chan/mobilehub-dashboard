@@ -9,7 +9,7 @@ const statuses = ["ACTIVE", "INACTIVE"];
 const UserFormModal = ({ isOpen, onClose, mode = "create", initialData = {}, onSuccess }) => {
   const [form, setForm] = useState({
     email: "",
-    name: "",
+    username: "", // [FIX] Đổi name thành username để khớp với API
     password: "",
     role: "USER",
     status: "Active",
@@ -22,13 +22,22 @@ const UserFormModal = ({ isOpen, onClose, mode = "create", initialData = {}, onS
     if (mode === "edit" && initialData) {
       setForm({
         email: initialData.email || "",
-        name: initialData.name || "",
-        password: "",
+        username: initialData.username || "", // [FIX] Lấy username từ initialData
+        password: "", // Mật khẩu luôn reset về rỗng khi edit
         role: initialData.role || "USER",
         status: initialData.status || "Active",
       });
+    } else {
+        // Reset form khi mở modal tạo mới
+        setForm({
+            email: "",
+            username: "",
+            password: "",
+            role: "USER",
+            status: "Active",
+        });
     }
-  }, [mode, initialData]);
+  }, [mode, initialData, isOpen]);
 
   if (!isOpen) return null;
 
@@ -51,7 +60,8 @@ const UserFormModal = ({ isOpen, onClose, mode = "create", initialData = {}, onS
       onClose();
     } catch (error) {
       console.error("❌ Lỗi khi lưu user:", error);
-      alert("Không thể lưu người dùng!");
+      // Hiển thị thông báo lỗi chi tiết hơn nếu có từ server
+      alert(error.response?.data?.message || "Không thể lưu người dùng!");
     }
   };
 
@@ -92,21 +102,21 @@ const UserFormModal = ({ isOpen, onClose, mode = "create", initialData = {}, onS
                   onChange={handleChange}
                   required
                   placeholder="Nhập email"
-                  disabled={mode === "edit"}
-                  className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-2 focus:ring-gray-900 focus:outline-none disabled:bg-gray-100"
+                  // disabled={mode === "edit"} // Có thể cho sửa email hoặc không tùy nghiệp vụ
+                  className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-2 focus:ring-gray-900 focus:outline-none"
                 />
               </div>
 
-              {/* Name */}
+              {/* Username (Sửa label và name) */}
               <div>
-                <label className="text-sm font-medium text-gray-700">Tên</label>
+                <label className="text-sm font-medium text-gray-700">Tên đăng nhập (Username)</label>
                 <input
                   type="text"
-                  name="name"
-                  value={form.name}
+                  name="username" // [FIX] name="username"
+                  value={form.username} // [FIX] value={form.username}
                   onChange={handleChange}
                   required
-                  placeholder="Nhập tên"
+                  placeholder="Nhập tên đăng nhập"
                   className="w-full mt-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:ring-2 focus:ring-gray-900 focus:outline-none"
                 />
               </div>

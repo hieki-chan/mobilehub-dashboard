@@ -4,6 +4,7 @@ import ListFilterBar from "../common_components/ListFilterBar";
 import UserGridView from "./UserGridView";
 import UserTableView from "./UserTableView";
 import UserFormModal from "./form/UserFormModal";
+import UserDetailModal from "./UserDetailModal";
 import {
   fetchAdminUsersPaged,
   createAdminUser,
@@ -27,6 +28,8 @@ const UserListSection = () => {
   const [searchField, setSearchField] = useState("username");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [viewingUser, setViewingUser] = useState(null);
+
   const searchOptions = [
     { label: "Tên", value: "username" },
     { label: "Email", value: "email" },
@@ -36,18 +39,23 @@ const UserListSection = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(15);
+  
+  // Logic phân trang Client-side
   const totalItems = filteredUsers.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1; // Đảm bảo ít nhất là 1 trang
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, []); // Chỉ chạy 1 lần khi mount
 
   const loadUsers = async () => {
     try {
-      const data = await fetchAdminUsersPaged(currentPage - 1, itemsPerPage);
+      // [FIX] Thay vì lấy theo trang (currentPage), ta lấy số lượng lớn (ví dụ 10000)
+      // để có toàn bộ dữ liệu cho việc Lọc/Tìm kiếm ở Client.
+      const data = await fetchAdminUsersPaged(0, 10000); 
+      
       if (data?.content) {
         const normalized = data.content.map((u) => ({
           id: u.id ?? 0,
@@ -63,14 +71,21 @@ const UserListSection = () => {
             ).toUpperCase(),
           color: "bg-orange-500",
         }));
+        
+        // Lưu toàn bộ user vào state
         setUsers(normalized);
-        setFilteredUsers(normalized);
+        setFilteredUsers(normalized); // Khởi tạo danh sách lọc bằng toàn bộ user
       }
     } catch (err) {
       console.error("❌ Lỗi tải người dùng:", err);
     }
   };
 
+  const handleViewUser = (user) => {
+    setViewingUser(user);
+  };
+
+  // useEffect này sẽ chạy mỗi khi filters thay đổi để lọc lại danh sách từ `users` gốc
   useEffect(() => {
     handleFilter();
   }, [users, selectedRole, selectedStatus, searchQuery, searchField]);
@@ -92,10 +107,11 @@ const UserListSection = () => {
     }
 
     setFilteredUsers(result);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset về trang 1 khi filter thay đổi
   };
 
   const getPageUsers = () => {
+    // Logic cắt trang Client-side này giờ sẽ hoạt động đúng
     const start = (currentPage - 1) * itemsPerPage;
     return filteredUsers.slice(start, start + itemsPerPage);
   };
@@ -121,7 +137,7 @@ const UserListSection = () => {
         await createAdminUser(formData);
         alert("✅ Tạo người dùng thành công!");
       }
-      await loadUsers();
+      await loadUsers(); // Tải lại danh sách sau khi lưu
       setShowForm(false);
     } catch (err) {
       console.error("❌ Lỗi lưu người dùng:", err);
@@ -137,7 +153,17 @@ const UserListSection = () => {
     if (!confirmed) return;
     try {
       await deleteAdminUser(id);
-      setUsers((prev) => prev.filter((u) => u.id !== id));
+      // Cập nhật trực tiếp vào state để không phải gọi lại API (Tối ưu UI)
+      const newUsers = users.filter((u) => u.id !== id);
+      setUsers(newUsers);
+      // Trigger lại filter
+      let result = [...newUsers];
+      if (selectedRole !== "ALL") result = result.filter((u) => u.role === selectedRole);
+      if (selectedStatus !== "ALL") result = result.filter((u) => u.status === selectedStatus);
+      // ... (logic filter đơn giản hoặc gọi handleFilter nếu tách useEffect khéo léo)
+      // Cách đơn giản nhất là gọi lại loadUsers() hoặc để useEffect tự chạy nếu dependencies đúng
+      // Ở đây ta gọi loadUsers() cho an toàn dữ liệu
+      loadUsers();
     } catch (err) {
       console.error("❌ Lỗi xoá user:", err);
     }
@@ -220,19 +246,21 @@ const UserListSection = () => {
       <div className="relative">
         {viewMode === "table" ? (
           <UserTableView
-            users={getPageUsers()}
+            users={getPageUsers()} // Lấy danh sách đã cắt trang
             onDelete={handleDelete}
             onEdit={handleEditUser}
+            onView={handleViewUser}
           />
         ) : (
           <UserGridView
             users={getPageUsers()}
             onDelete={handleDelete}
             onEdit={handleEditUser}
+            onView={handleViewUser}
           />
         )}
 
-        {showForm && (
+        {(showForm || viewingUser) && (
           <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] cursor-not-allowed z-40" />
         )}
       </div>
@@ -244,6 +272,10 @@ const UserListSection = () => {
         onClose={() => setShowForm(false)}
         onSuccess={loadUsers}
         onSubmit={handleSubmitUser}
+      />
+      <UserDetailModal 
+        user={viewingUser} 
+        onClose={() => setViewingUser(null)} 
       />
     </ListPageLayout>
   );

@@ -27,7 +27,8 @@ export const updateAdminUser = async (id, userData) => {
   const request = {
     email: userData.email,
     username: userData.username,
-    password: userData.password,
+    // [FIX] Nếu password rỗng thì gửi null để backend bỏ qua update password
+    password: userData.password && userData.password.trim() !== "" ? userData.password : null,
     role: userData.role,
     status: userData.status,
   };
